@@ -1,0 +1,92 @@
+# config/layout.yaml — POSICIONES DE ELEMENTOS
+#
+# Todas las medidas estan en PULGADAS (inches). 1 pulgada = 2.54 cm
+# El slide mide 13.33" de ancho x 7.5" de alto
+#
+# Para editar visualmente sin tocar codigo:
+#   Menu -> [3] Herramientas de diseno -> [1] Abrir editor visual
+#   Mueve las cajas en PowerPoint y luego -> [2] Aplicar cambios del editor visual
+
+cover:
+  logo:           { left: 0.5,   top: 0.25,  width: 2.2,   height: 0.7  }
+  accent_bar:     { left: 0.0,   top: 0.0,   width: 13.33, height: 0.12 }
+  overlay:        { left: 0.0,   top: 4.5,   width: 13.33, height: 3.0  }
+  title:          { left: 0.8,   top: 2.3,   width: 11.5,  height: 1.5  }
+  subtitle:       { left: 0.8,   top: 3.85,  width: 9.0,   height: 0.65 }
+  divider:        { left: 0.8,   top: 4.55,  width: 2.5,   height: 0.04 }
+  client:         { left: 0.8,   top: 4.7,   width: 6.0,   height: 0.45 }
+  meta:           { left: 8.5,   top: 6.6,   width: 4.5,   height: 0.5  }
+
+section_divider:
+  top_line:       { left: 0.0,   top: 0.0,   width: 13.33, height: 0.1  }
+  right_bar:      { left: 12.53, top: 0.0,   width: 0.8,   height: 7.5  }
+  section_number: { left: 0.8,   top: 0.8,   width: 4.0,   height: 2.0  }
+  section_title:  { left: 0.8,   top: 2.8,   width: 11.3,  height: 1.5  }
+  divider:        { left: 0.8,   top: 4.4,   width: 3.5,   height: 0.05 }
+  tagline:        { left: 0.8,   top: 4.6,   width: 11.3,  height: 0.6  }
+
+content_two_col:
+  header_bar:         { left: 0.0,  top: 0.0,  width: 13.33, height: 1.2  }
+  title:              { left: 0.5,  top: 0.15, width: 12.33, height: 0.9  }
+  accent_line:        { left: 0.0,  top: 1.2,  width: 13.33, height: 0.06 }
+  left_col_title:     { left: 0.5,  top: 1.45, width: 5.9,   height: 0.55 }
+  left_col_bullets:   { left: 0.5,  top: 2.05, width: 5.9,   height: 5.1  }
+  divider:            { left: 6.55, top: 1.35, width: 0.04,  height: 5.9  }
+  right_col_title:    { left: 7.0,  top: 1.45, width: 5.83,  height: 0.55 }
+  right_col_bullets:  { left: 7.0,  top: 2.05, width: 5.83,  height: 5.1  }
+
+pricing_table:
+  header_bar:   { left: 0.0, top: 0.0,  width: 13.33, height: 1.1  }
+  title:        { left: 0.5, top: 0.15, width: 12.33, height: 0.8  }
+  accent_line:  { left: 0.0, top: 1.1,  width: 13.33, height: 0.06 }
+  table:        { left: 0.5, top: 1.3,  width: 12.33, height: 0.42 }
+  notes:        { left: 0.5, top: 0.2,  width: 12.33, height: 0.45 }
+
+profile_card:
+  left_panel:       { left: 0.0, top: 0.0,  width: 4.6,  height: 7.5  }
+  left_accent_bar:  { left: 0.0, top: 0.0,  width: 4.6,  height: 0.12 }
+  photo:            { left: 0.8, top: 0.6,  width: 3.0,  height: 3.0  }
+  name:             { left: 0.5, top: 3.75, width: 4.0,  height: 0.65 }
+  role:             { left: 0.5, top: 4.4,  width: 4.0,  height: 0.45 }
+  seniority:        { left: 0.5, top: 4.85, width: 4.0,  height: 0.4  }
+  panel_divider:    { left: 4.6, top: 0.0,  width: 0.06, height: 7.5  }
+  skills_label:     { left: 5.0, top: 0.35, width: 7.8,  height: 0.45 }
+  skills_area:      { left: 5.0, top: 0.85, width: 7.8,  height: 1.8  }
+  highlights_label: { left: 5.0, top: 0.35, width: 7.8,  height: 0.45 }
+  highlights_area:  { left: 5.0, top: 0.85, width: 7.8,  height: 3.5  }
+
+stat_callout:
+  accent_bar_top:    { left: 0.0, top: 0.0,  width: 13.33, height: 0.12 }
+  accent_bar_bottom: { left: 0.0, top: 7.38, width: 13.33, height: 0.12 }
+  big_number:        { left: 0.5, top: 0.8,  width: 12.33, height: 2.8  }
+  label:             { left: 0.5, top: 3.6,  width: 12.33, height: 0.75 }
+  divider:           { left: 5.5, top: 4.5,  width: 2.33,  height: 0.05 }
+  context:           { left: 1.5, top: 4.7,  width: 10.33, height: 0.55 }
+  source:            { left: 8.0, top: 6.6,  width: 4.83,  height: 0.45 }
+
+closing:
+  accent_bar_top:    { left: 0.0, top: 0.0,  width: 13.33, height: 0.12 }
+  accent_bar_bottom: { left: 0.0, top: 7.38, width: 13.33, height: 0.12 }
+  logo:              { left: 0.5, top: 0.25, width: 2.0,   height: 0.65 }
+  headline:          { left: 0.8, top: 1.3,  width: 11.5,  height: 1.2  }
+  divider:           { left: 2.5, top: 2.7,  width: 8.33,  height: 0.05 }
+  contact_label:     { left: 0.8, top: 2.9,  width: 12.0,  height: 0.4  }
+  contact_name:      { left: 0.8, top: 3.35, width: 4.0,   height: 0.5  }
+  contact_email:     { left: 4.8, top: 3.35, width: 4.0,   height: 0.5  }
+  contact_phone:     { left: 8.6, top: 3.35, width: 4.0,   height: 0.5  }
+  cta_box:           { left: 3.0, top: 4.35, width: 7.33,  height: 0.75 }
+  cta_text:          { left: 3.1, top: 4.45, width: 7.13,  height: 0.55 }
+
+content_one_col:
+  header_bar:  { left: 0.0, top: 0.0,  width: 13.33, height: 1.2  }
+  title:       { left: 0.5, top: 0.15, width: 12.33, height: 0.9  }
+  accent_line: { left: 0.0, top: 1.2,  width: 13.33, height: 0.06 }
+  body_title:  { left: 0.8, top: 1.45, width: 12.0,  height: 0.55 }
+  bullets:     { left: 0.8, top: 2.1,  width: 12.0,  height: 5.0  }
+
+grafico:
+  header_bar:  { left: 0.0, top: 0.0,  width: 13.33, height: 1.2  }
+  title:       { left: 0.5, top: 0.15, width: 12.33, height: 0.9  }
+  accent_line: { left: 0.0, top: 1.2,  width: 13.33, height: 0.06 }
+  chart_area:  { left: 0.5, top: 1.4,  width: 12.33, height: 5.55 }
+  source:      { left: 0.5, top: 7.0,  width: 12.33, height: 0.4  }

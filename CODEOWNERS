@@ -1,0 +1,21 @@
+# CODEOWNERS — Softgic Deck Generator
+# Cada PR requiere aprobacion del dueno de cada area.
+# Referencia: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Dueno por defecto para todo el repositorio
+*                           @softgic/platform-team
+
+# Pipeline core — requiere revision de arquitectura
+generate.py                 @softgic/platform-team
+src/                        @softgic/platform-team
+
+# Configuracion visual — puede editar el equipo de diseno
+config/theme.yaml           @softgic/platform-team @softgic/design-team
+config/layout.yaml          @softgic/platform-team @softgic/design-team
+assets/                     @softgic/design-team
+
+# Ejemplos — puede editar el equipo comercial con revision de plataforma
+examples/                   @softgic/platform-team @softgic/comercial-team
+
+# Tests — siempre requieren revision de plataforma
+tests/                      @softgic/platform-team

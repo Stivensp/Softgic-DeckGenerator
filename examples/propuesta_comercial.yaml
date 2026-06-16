@@ -1,0 +1,95 @@
+# Softgic Deck Generator — Ejemplo: Propuesta Comercial
+# Ejecutar: python generate.py --input examples/propuesta_comercial.yaml --output output/propuesta_comercial.pptx
+
+slides:
+
+  - type: cover
+    title: "Propuesta de Solución Digital"
+    subtitle: "Transformación del área comercial"
+    client: "Cliente XYZ S.A.S."
+    date: "Junio 2026"
+    author: "Equipo Comercial Softgic"
+
+  - type: section_divider
+    section_number: "01"
+    section_title: "Contexto del Reto"
+    tagline: "Entendemos el problema antes de proponer la solución."
+
+  - type: content_two_col
+    title: "Situación Actual vs. Situación Esperada"
+    left:
+      title: "Situación Actual"
+      bullets:
+        - "Proceso manual de cotización"
+        - "Reprocesos por errores de datos"
+        - "Tiempo promedio: 3 días por propuesta"
+        - "Sin trazabilidad de versiones"
+    right:
+      title: "Situación Esperada"
+      bullets:
+        - "Generación automática desde plantilla"
+        - "Reducción de errores a < 1%"
+        - "Tiempo objetivo: 30 minutos"
+        - "Historial completo de versiones"
+
+  - type: section_divider
+    section_number: "02"
+    section_title: "Nuestra Propuesta de Valor"
+    tagline: "Tecnología que se adapta a tu negocio."
+
+  - type: stat_callout
+    big_number: "98%"
+    label: "Satisfacción de clientes Softgic"
+    context: "Basado en encuestas post-entrega 2025"
+    source: "Área de Customer Success"
+
+  - type: profile_card
+    name: "Laura Martínez"
+    role: "Tech Lead — Backend"
+    years_experience: 8
+    seniority: "Senior"
+    skills:
+      - "Python"
+      - "FastAPI"
+      - "AWS"
+      - "PostgreSQL"
+      - "Docker"
+      - "Terraform"
+    highlights:
+      - "Lideró migración a microservicios en FinTech (2024)"
+      - "Certificada AWS Solutions Architect"
+      - "+50 proyectos entregados en tiempo y forma"
+
+  - type: pricing_table
+    title: "Inversión del Proyecto"
+    currency: "USD"
+    rows:
+      - description: "Análisis y Arquitectura de Solución"
+        quantity: 1
+        unit_price: 5000.00
+        total: 5000.00
+      - description: "Desarrollo Backend (sprints x3)"
+        quantity: 3
+        unit_price: 8000.00
+        total: 24000.00
+      - description: "Desarrollo Frontend"
+        quantity: 1
+        unit_price: 6000.00
+        total: 6000.00
+      - description: "QA y Pruebas de Integración"
+        quantity: 1
+        unit_price: 3000.00
+        total: 3000.00
+      - description: "Despliegue y Go-Live"
+        quantity: 1
+        unit_price: 2000.00
+        total: 2000.00
+    totals: 40000.00
+    notes: "Precios en dólares americanos. No incluye IVA. Válido por 30 días."
+
+  - type: closing
+    headline: "¿Listo para transformar tu operación?"
+    contact_name: "Carlos Gómez"
+    contact_email: "carlos.gomez@softgic.com"
+    contact_phone: "+57 300 123 4567"
+    cta: "Agenda tu sesión de kickoff en los próximos 5 días"

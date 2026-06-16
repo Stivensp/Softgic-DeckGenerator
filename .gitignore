@@ -1,0 +1,27 @@
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+env/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+logs/*.log
+output/*.pptx
+*.pptx
+!assets/template.pptx
+# Config visual generado por open_visual_editor.py — no va al repo
+assets/config_visual.pptx
+# Secrets
+.env
+secrets.yaml
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini

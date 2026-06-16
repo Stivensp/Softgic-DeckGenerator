@@ -1,0 +1,78 @@
+# Softgic Deck Generator — Ejemplo: Talent Acquisition Profile Deck
+# Ejecutar: python generate.py --input examples/talent_profile.yaml --output output/talent_profile.pptx
+
+slides:
+
+  - type: cover
+    title: "Perfiles Técnicos Disponibles"
+    subtitle: "Equipo especializado para tu proyecto"
+    client: "Talent Acquisition — Softgic"
+    date: "Junio 2026"
+
+  - type: section_divider
+    section_number: "01"
+    section_title: "Perfiles Backend"
+    tagline: "Expertos en arquitectura de soluciones escalables."
+
+  - type: profile_card
+    name: "Andrés Camacho"
+    role: "Senior Backend Engineer"
+    years_experience: 9
+    seniority: "Senior"
+    skills:
+      - "Java"
+      - "Spring Boot"
+      - "Kafka"
+      - "PostgreSQL"
+      - "AWS"
+      - "Kubernetes"
+    highlights:
+      - "Arquitecto de plataforma de pagos procesando 1M tx/día"
+      - "Speaker en JavaConf Colombia 2024"
+
+  - type: profile_card
+    name: "Valeria Torres"
+    role: "Mid Backend Engineer"
+    years_experience: 4
+    seniority: "Mid"
+    skills:
+      - "Node.js"
+      - "TypeScript"
+      - "MongoDB"
+      - "Redis"
+      - "GCP"
+    highlights:
+      - "Redujo latencia de API en 40% mediante caché distribuido"
+
+  - type: section_divider
+    section_number: "02"
+    section_title: "Perfiles Frontend"
+    tagline: "Interfaces que convierten usuarios en fans."
+
+  - type: profile_card
+    name: "Diego Ramírez"
+    role: "Senior Frontend Engineer"
+    years_experience: 7
+    seniority: "Senior"
+    skills:
+      - "React"
+      - "TypeScript"
+      - "Next.js"
+      - "GraphQL"
+      - "Figma"
+    highlights:
+      - "Lideró rediseño de app con NPS de 32 a 71"
+      - "Certificado Google UX Design"
+
+  - type: stat_callout
+    big_number: "+120"
+    label: "Profesionales activos en el pool Softgic"
+    context: "Disponibilidad promedio de onboarding: 2 semanas"
+    source: "Talent Acquisition — Junio 2026"
+
+  - type: closing
+    headline: "Encontremos al equipo perfecto para tu proyecto"
+    contact_name: "María Ospina"
+    contact_email: "talent@softgic.com"
+    contact_phone: "+57 310 987 6543"
+    cta: "Solicita tu shortlist de perfiles en 48 horas"

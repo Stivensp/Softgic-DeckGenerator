@@ -1,0 +1,143 @@
+# Softgic Deck Generator — Ejemplo: Costeo de Proyecto (E.05b)
+# Ejecutar: python generate.py --input examples/costeo.yaml --output output/costeo.pptx
+
+slides:
+
+  - type: cover
+    title: "Estimación de Costos — Plataforma de Datos"
+    subtitle: "Desglose detallado por fase y componente"
+    client: "Empresa ABC S.A."
+    date: "Junio 2026"
+    author: "Equipo de Arquitectura Softgic"
+
+  - type: section_divider
+    section_number: "01"
+    section_title: "Resumen Ejecutivo"
+    tagline: "Inversión total y distribución por fase."
+
+  - type: content_one_col
+    title: "Alcance del Proyecto"
+    body_title: "Componentes incluidos en esta estimación"
+    bullets:
+      - "Análisis de requerimientos y arquitectura de solución"
+      - "Infraestructura cloud (servidores, base de datos, almacenamiento)"
+      - "Licencias de software de terceros (primer año)"
+      - "Desarrollo de módulos: ingesta, transformación y visualización de datos"
+      - "Integración con sistemas existentes (ERP + CRM)"
+      - "QA, pruebas de carga y auditoría de seguridad"
+      - "Capacitación al equipo técnico del cliente (16 horas)"
+      - "Soporte post-go-live durante 3 meses"
+
+  - type: grafico
+    title: "Distribución de Costos por Fase"
+    chart_type: "column"
+    chart_title: "Inversión en USD por fase"
+    categories:
+      - "Fase 1\nAnálisis"
+      - "Fase 2\nInfraestructura"
+      - "Fase 3\nDesarrollo"
+      - "Fase 4\nQA"
+      - "Fase 5\nDespliegue"
+    series:
+      - name: "Costo USD"
+        values: [8500.0, 14200.0, 42000.0, 9800.0, 5500.0]
+    source: "Estimación Softgic — Junio 2026"
+
+  - type: section_divider
+    section_number: "02"
+    section_title: "Fase 1 — Análisis e Infraestructura"
+    tagline: "Fundamentos técnicos y arquitectura base."
+
+  - type: pricing_table
+    title: "Fase 1 — Análisis e Infraestructura"
+    currency: "USD"
+    rows:
+      - description: "Arquitectura de solución y diseño técnico"
+        quantity: 40
+        unit: "horas"
+        unit_price: 85.00
+        total: 3400.00
+      - description: "Levantamiento de requerimientos"
+        quantity: 24
+        unit: "horas"
+        unit_price: 75.00
+        total: 1800.00
+      - description: "Servidores cloud (producción + staging)"
+        quantity: 2
+        unit: "servidores"
+        unit_price: 1200.00
+        total: 2400.00
+      - description: "Almacenamiento S3 / blob storage (estimado anual)"
+        quantity: 1
+        unit: "TB/año"
+        unit_price: 900.00
+        total: 900.00
+    totals: 8500.00
+    notes: "Servidores: instancia t3.large. Almacenamiento sujeto a uso real."
+
+  - type: section_divider
+    section_number: "03"
+    section_title: "Fase 2 — Desarrollo de Plataforma"
+    tagline: "Módulos de ingesta, transformación y visualización."
+
+  - type: pricing_table
+    title: "Fase 2 — Desarrollo"
+    currency: "USD"
+    rows:
+      - description: "Módulo de ingesta de datos (conectores)"
+        quantity: 3
+        unit: "sprints"
+        unit_price: 7000.00
+        total: 21000.00
+      - description: "Módulo de transformación y pipelines ETL"
+        quantity: 2
+        unit: "sprints"
+        unit_price: 7000.00
+        total: 14000.00
+      - description: "Dashboard de visualización (web)"
+        quantity: 1
+        unit: "módulo"
+        unit_price: 7000.00
+        total: 7000.00
+    totals: 42000.00
+    notes: "Sprint = 2 semanas. Precio por sprint incluye diseño, desarrollo y revisión."
+
+  - type: pricing_table
+    title: "Fase 3 — QA, Despliegue y Licencias"
+    currency: "USD"
+    rows:
+      - description: "QA funcional y pruebas de integración"
+        quantity: 80
+        unit: "horas"
+        unit_price: 65.00
+        total: 5200.00
+      - description: "Pruebas de carga y seguridad"
+        quantity: 1
+        unit: "auditoría"
+        unit_price: 4600.00
+        total: 4600.00
+      - description: "Despliegue a producción y go-live"
+        quantity: 1
+        unit: "entrega"
+        unit_price: 3500.00
+        total: 3500.00
+      - description: "Licencias software BI (primer año)"
+        quantity: 5
+        unit: "usuarios"
+        unit_price: 400.00
+        total: 2000.00
+    totals: 15300.00
+    notes: "Licencias BI: renovación anual requerida. Precio por usuario/año."
+
+  - type: stat_callout
+    big_number: "USD 65,800"
+    label: "Inversión total del proyecto"
+    context: "Fases 1 a 3 · Incluye desarrollo, infraestructura y licencias año 1"
+    source: "Estimación Softgic — válida por 30 días calendario"
+
+  - type: closing
+    headline: "Iniciemos la transformación de tus datos"
+    contact_name: "Carlos Gómez"
+    contact_email: "carlos.gomez@softgic.com"
+    contact_phone: "+57 300 123 4567"
+    cta: "Solicita tu sesión de revisión técnica esta semana"

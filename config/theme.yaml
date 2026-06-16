@@ -1,0 +1,53 @@
+# Softgic Deck Generator — Corporate Theme
+# Version controlled. All visual decisions live here.
+# Changing this file affects every generated deck.
+# NEVER hardcode visual values in Python code — reference ThemeModel instead.
+
+version: "1.0.0"
+
+colors:
+  primary: "#0A1628"        # Softgic Navy — dark backgrounds, headers
+  secondary: "#1E3A5F"      # Mid-blue — section backgrounds
+  accent: "#00AEEF"         # Softgic Blue — highlights, tags, callouts
+  background: "#FFFFFF"     # Slide background for light slides
+  text_dark: "#0A1628"      # Body text on light backgrounds
+  text_light: "#FFFFFF"     # Text on dark backgrounds
+  text_muted: "#6B7280"     # Captions, secondary info
+  divider: "#E5E7EB"        # Horizontal rules, table lines
+
+fonts:
+  family: "Calibri"         # Safe system font. Replace with "Montserrat" when installed.
+  size_heading: 36
+  size_subheading: 24
+  size_body: 14
+  size_caption: 10
+  size_stat: 72             # stat_callout big number
+  bold_headings: true
+
+assets:
+  template: "assets/template.pptx"
+  logo_white: "assets/logo_white.png"
+  logo_dark: "assets/logo_dark.png"
+  placeholder_profile: "assets/placeholder_profile.png"
+
+limits:
+  title_max_chars: 80
+  subtitle_max_chars: 120
+  bullet_max_chars: 100
+  bullets_per_column_max: 6
+  skills_max: 8
+  pricing_rows_max: 10
+  profile_image_min_width: 200
+  profile_image_min_height: 200
+
+# These indices reference slide layouts inside assets/template.pptx.
+# Index 6 is the standard "blank" layout present in every PowerPoint template.
+# Update these when the corporate Softgic template is provided.
+layout_indices:
+  cover: 6
+  section_divider: 6
+  content_two_col: 6
+  pricing_table: 6
+  profile_card: 6
+  stat_callout: 6
+  closing: 6
