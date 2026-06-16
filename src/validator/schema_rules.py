@@ -11,10 +11,12 @@ REGISTERED_TYPES: frozenset[str] = frozenset(
         "cover",
         "section_divider",
         "content_two_col",
+        "content_one_col",
         "pricing_table",
         "profile_card",
         "stat_callout",
         "closing",
+        "grafico",
     }
 )
 
@@ -22,16 +24,19 @@ REQUIRED_FIELDS: dict[str, list[str]] = {
     "cover": ["title"],
     "section_divider": ["section_number", "section_title"],
     "content_two_col": ["title", "left", "right"],
+    "content_one_col": ["title", "bullets"],
     "pricing_table": ["title", "currency", "rows", "totals"],
     "profile_card": ["name", "role", "years_experience", "seniority", "skills"],
     "stat_callout": ["big_number", "label"],
     "closing": ["headline", "contact_name", "contact_email"],
+    "grafico": ["title", "categories", "series"],
 }
 
 FIELD_TYPES: dict[str, dict[str, type | tuple[type, ...]]] = {
     "cover": {"title": str},
     "section_divider": {"section_number": str, "section_title": str},
     "content_two_col": {"title": str, "left": dict, "right": dict},
+    "content_one_col": {"title": str, "bullets": list},
     "pricing_table": {"title": str, "currency": str, "rows": list, "totals": (int, float)},
     "profile_card": {
         "name": str,
@@ -42,6 +47,7 @@ FIELD_TYPES: dict[str, dict[str, type | tuple[type, ...]]] = {
     },
     "stat_callout": {"big_number": str, "label": str},
     "closing": {"headline": str, "contact_name": str, "contact_email": str},
+    "grafico": {"title": str, "categories": list, "series": list},
 }
 
 
@@ -98,9 +104,30 @@ class SchemaRulesValidator:
                         slide_index=idx,
                     )
 
-        if slide_type in ("content_two_col",):
+        if slide_type == "content_two_col":
             self._check_bullet_column(slide.get("left", {}), "left", idx)
             self._check_bullet_column(slide.get("right", {}), "right", idx)
+
+        if slide_type == "content_one_col":
+            bullets = slide.get("bullets", [])
+            if not isinstance(bullets, list) or len(bullets) == 0:
+                raise SchemaValidationError(
+                    "'bullets' must not be empty", field="bullets", slide_index=idx
+                )
+
+        if slide_type == "grafico":
+            series = slide.get("series", [])
+            if not isinstance(series, list) or len(series) == 0:
+                raise SchemaValidationError(
+                    "'series' must not be empty", field="series", slide_index=idx
+                )
+            for s_idx, s in enumerate(series):
+                if not isinstance(s, dict) or "name" not in s or "values" not in s:
+                    raise SchemaValidationError(
+                        f"series[{s_idx}] must have 'name' and 'values'",
+                        field=f"series[{s_idx}]",
+                        slide_index=idx,
+                    )
 
         if slide_type == "pricing_table":
             rows = slide.get("rows", [])

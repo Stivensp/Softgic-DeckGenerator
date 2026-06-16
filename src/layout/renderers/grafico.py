@@ -105,9 +105,12 @@ class GraficoRenderer(BaseLayoutRenderer):
                     plot_series.format.fill.solid()
                     plot_series.format.fill.fore_color.rgb = _hex_rgb(color)
 
-            # Clean up chart background
-            chart.plot_area.format.fill.background()
-            chart.chart_area.format.fill.background()
+            # Clear chart backgrounds (attributes vary by python-pptx version)
+            for attr in ("plot_area", "chart_area"):
+                try:
+                    getattr(chart, attr).format.fill.background()
+                except Exception:
+                    pass
 
         except Exception as e:
             logger.warning("No se pudo renderizar chart nativo (%s) — omitiendo", e)
