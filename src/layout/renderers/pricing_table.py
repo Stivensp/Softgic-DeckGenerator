@@ -11,10 +11,10 @@ from src.models.theme import ThemeModel
 
 _D = {
     "header_bar":  {"left": 0.0, "top": 0.0,  "width": 13.33, "height": 1.1 },
-    "title":       {"left": 0.5, "top": 0.15, "width": 12.33, "height": 0.8 },
+    "title":       {"left": 0.5, "top": 0.15, "width": 12.33, "height": 0.8,  "font_size": 24},
     "accent_line": {"left": 0.0, "top": 1.1,  "width": 13.33, "height": 0.06},
     "table":       {"left": 0.5, "top": 1.3,  "width": 12.33, "height": 0.42},
-    "notes":       {"left": 0.5, "top": 0.2,  "width": 12.33, "height": 0.45},
+    "notes":       {"left": 0.5, "top": 0.2,  "width": 12.33, "height": 0.45, "font_size": 10},
 }
 
 _COL_WIDTHS = (5.0, 1.1, 1.73, 2.2, 2.3)
@@ -35,15 +35,16 @@ class PricingTableRenderer(BaseLayoutRenderer):
         set_slide_background(slide, c.background)  # type: ignore[arg-type]
 
         p = _p("header_bar")
-        add_colored_box(slide, p["left"], p["top"], p["width"], p["height"], c.primary)  # type: ignore[arg-type]
+        add_colored_box(slide, p["left"], p["top"], p["width"], p["height"], p.get("fill", c.primary))  # type: ignore[arg-type]
 
         p = _p("title")
         title = truncate_text(model.title, lim.title_max_chars, "pricing_table.title")
         add_text_box(slide, p["left"], p["top"], p["width"], p["height"], title,  # type: ignore[arg-type]
-                     f.family, f.size_subheading, c.text_light, bold=f.bold_headings)
+                     f.family, p.get("font_size", f.size_subheading), p.get("color", c.text_light),
+                     bold=f.bold_headings)
 
         p = _p("accent_line")
-        add_colored_box(slide, p["left"], p["top"], p["width"], p["height"], c.accent)  # type: ignore[arg-type]
+        add_colored_box(slide, p["left"], p["top"], p["width"], p["height"], p.get("fill", c.accent))  # type: ignore[arg-type]
 
         row_h = _p("table")["height"]
         num_rows = 1 + len(model.rows) + 1

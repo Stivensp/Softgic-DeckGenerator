@@ -17,10 +17,10 @@ logger = logging.getLogger("softgic.layout.renderers.grafico")
 
 _D = {
     "header_bar":  {"left": 0.0, "top": 0.0,  "width": 13.33, "height": 1.2 },
-    "title":       {"left": 0.5, "top": 0.15, "width": 12.33, "height": 0.9 },
+    "title":       {"left": 0.5, "top": 0.15, "width": 12.33, "height": 0.9,  "font_size": 24},
     "accent_line": {"left": 0.0, "top": 1.2,  "width": 13.33, "height": 0.06},
     "chart_area":  {"left": 0.5, "top": 1.4,  "width": 12.33, "height": 5.55},
-    "source":      {"left": 0.5, "top": 7.0,  "width": 12.33, "height": 0.4 },
+    "source":      {"left": 0.5, "top": 7.0,  "width": 12.33, "height": 0.4,  "font_size": 10},
 }
 
 _CHART_TYPE_MAP: dict[str, XL_CHART_TYPE] = {
@@ -59,15 +59,16 @@ class GraficoRenderer(BaseLayoutRenderer):
         set_slide_background(slide, c.background)  # type: ignore[arg-type]
 
         p = _p("header_bar")
-        add_colored_box(slide, p["left"], p["top"], p["width"], p["height"], c.primary)  # type: ignore[arg-type]
+        add_colored_box(slide, p["left"], p["top"], p["width"], p["height"], p.get("fill", c.primary))  # type: ignore[arg-type]
 
         p = _p("title")
         title = truncate_text(model.title, lim.title_max_chars, "grafico.title")
         add_text_box(slide, p["left"], p["top"], p["width"], p["height"], title,  # type: ignore[arg-type]
-                     f.family, f.size_subheading, c.text_light, bold=f.bold_headings)
+                     f.family, p.get("font_size", f.size_subheading), p.get("color", c.text_light),
+                     bold=f.bold_headings)
 
         p = _p("accent_line")
-        add_colored_box(slide, p["left"], p["top"], p["width"], p["height"], c.accent)  # type: ignore[arg-type]
+        add_colored_box(slide, p["left"], p["top"], p["width"], p["height"], p.get("fill", c.accent))  # type: ignore[arg-type]
 
         # Build chart
         chart_data = ChartData()

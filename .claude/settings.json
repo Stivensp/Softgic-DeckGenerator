@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell.exe -Command ' *)",
+      "Bash(powershell.exe -Command \"& 'C:\\\\Users\\\\Bramdon.Blanco\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe' tools/create_test_assets.py 2>&1\")",
+      "Bash(powershell.exe -Command \"& 'C:\\\\Users\\\\Bramdon.Blanco\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe' generate.py --input examples/propuesta_comercial.yaml --output output/propuesta_comercial.pptx 2>&1\")"
+    ]
+  }
+}
