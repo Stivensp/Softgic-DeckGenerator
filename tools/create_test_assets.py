@@ -1,8 +1,8 @@
 """
 Creates polished placeholder assets for testing:
-  assets/logo_white.png          — logo sobre fondo oscuro
-  assets/logo_dark.png           — logo sobre fondo blanco
-  assets/placeholder_profile.png — avatar genérico profesional
+  images/logo_white.png          — logo sobre fondo oscuro
+  images/logo_dark.png           — logo sobre fondo blanco
+  images/placeholder_profile.png — avatar genérico profesional
   assets/template.pptx           — template con dimensiones 16:9
 
 Run:  python tools/create_test_assets.py
@@ -101,13 +101,15 @@ def create_template(path: Path) -> None:
 
 if __name__ == "__main__":
     assets = Path("assets")
+    images = Path("images")
     assets.mkdir(exist_ok=True)
+    images.mkdir(exist_ok=True)
 
     print("\nGenerando assets de test...\n")
     create_template(assets / "template.pptx")
-    create_logo_white(assets / "logo_white.png")
-    create_logo_dark(assets / "logo_dark.png")
-    create_placeholder_profile(assets / "placeholder_profile.png")
+    create_logo_white(images / "logo_white.png")
+    create_logo_dark(images / "logo_dark.png")
+    create_placeholder_profile(images / "placeholder_profile.png")
 
     print("\nAssets listos. Ahora ejecuta:")
     print("  python generate.py --input examples/propuesta_comercial.yaml --output output/propuesta_comercial.pptx")

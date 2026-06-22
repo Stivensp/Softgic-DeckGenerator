@@ -1,10 +1,18 @@
 from __future__ import annotations
 
+from typing import Any
+
 from pptx.enum.text import PP_ALIGN
 
 from src.layout import layout_config as lc
 from src.layout.base_layout import BaseLayoutRenderer
-from src.layout.helpers import add_colored_box, add_text_box, set_slide_background, truncate_text
+from src.layout.helpers import (
+    add_colored_box,
+    add_text_box,
+    render_layout_extras,
+    set_slide_background,
+    truncate_text,
+)
 from src.models.slides import StatCalloutSlide
 from src.models.theme import ThemeModel
 
@@ -19,8 +27,11 @@ _D = {
 }
 
 
-def _p(el: str) -> dict:
-    return {**_D[el], **lc.pos("stat_callout", el)}
+def _p(el: str) -> dict[str, Any] | None:
+    override = lc.pos("stat_callout", el)
+    if override is None:
+        return None
+    return {**_D[el], **override}
 
 
 class StatCalloutRenderer(BaseLayoutRenderer):
@@ -30,34 +41,34 @@ class StatCalloutRenderer(BaseLayoutRenderer):
         f = theme.fonts
         lim = theme.limits
 
-        set_slide_background(slide, c.primary)  # type: ignore[arg-type]
+        set_slide_background(slide, c.background)  # type: ignore[arg-type]
 
         for bar in ("accent_bar_top", "accent_bar_bottom"):
-            p = _p(bar)
+            if (p := _p(bar)) is not None:
+                add_colored_box(slide, p["left"], p["top"], p["width"], p["height"], p.get("fill", c.accent))  # type: ignore[arg-type]
+
+        if (p := _p("big_number")) is not None:
+            add_text_box(slide, p["left"], p["top"], p["width"], p["height"],  # type: ignore[arg-type]
+                         model.big_number, f.family, p.get("font_size", f.size_stat),
+                         p.get("color", c.accent), bold=p.get("bold", True), align=PP_ALIGN.CENTER)
+
+        label = truncate_text(model.label, lim.title_max_chars, "stat_callout.label")
+        if (p := _p("label")) is not None:
+            add_text_box(slide, p["left"], p["top"], p["width"], p["height"],  # type: ignore[arg-type]
+                         label, f.family, p.get("font_size", f.size_subheading),
+                         p.get("color", c.text_dark), bold=p.get("bold", f.bold_headings), align=PP_ALIGN.CENTER)
+
+        if (p := _p("divider")) is not None:
             add_colored_box(slide, p["left"], p["top"], p["width"], p["height"], p.get("fill", c.accent))  # type: ignore[arg-type]
 
-        p = _p("big_number")
-        add_text_box(slide, p["left"], p["top"], p["width"], p["height"],  # type: ignore[arg-type]
-                     model.big_number, f.family, p.get("font_size", f.size_stat),
-                     p.get("color", c.accent), bold=True, align=PP_ALIGN.CENTER)
-
-        p = _p("label")
-        label = truncate_text(model.label, lim.title_max_chars, "stat_callout.label")
-        add_text_box(slide, p["left"], p["top"], p["width"], p["height"],  # type: ignore[arg-type]
-                     label, f.family, p.get("font_size", f.size_subheading),
-                     p.get("color", c.text_light), bold=f.bold_headings, align=PP_ALIGN.CENTER)
-
-        p = _p("divider")
-        add_colored_box(slide, p["left"], p["top"], p["width"], p["height"], p.get("fill", c.accent))  # type: ignore[arg-type]
-
-        if model.context:
-            p = _p("context")
+        if model.context and (p := _p("context")) is not None:
             add_text_box(slide, p["left"], p["top"], p["width"], p["height"],  # type: ignore[arg-type]
                          model.context, f.family, p.get("font_size", f.size_body),
                          p.get("color", c.text_muted), align=PP_ALIGN.CENTER)
 
-        if model.source:
-            p = _p("source")
+        if model.source and (p := _p("source")) is not None:
             add_text_box(slide, p["left"], p["top"], p["width"], p["height"],  # type: ignore[arg-type]
                          f"Fuente: {model.source}", f.family, p.get("font_size", f.size_caption),
                          p.get("color", c.text_muted), align=PP_ALIGN.RIGHT, italic=True)
+
+        render_layout_extras(slide, "stat_callout", set(_D.keys()), c.accent, model=model)  # type: ignore[arg-type]

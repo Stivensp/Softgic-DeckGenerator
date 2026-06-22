@@ -1,10 +1,17 @@
 from __future__ import annotations
 
-from pptx.enum.text import PP_ALIGN
+from typing import Any
 
 from src.layout import layout_config as lc
 from src.layout.base_layout import BaseLayoutRenderer
-from src.layout.helpers import add_bullet_list, add_colored_box, add_text_box, set_slide_background, truncate_text
+from src.layout.helpers import (
+    add_bullet_list,
+    add_colored_box,
+    add_text_box,
+    render_layout_extras,
+    set_slide_background,
+    truncate_text,
+)
 from src.models.slides import ContentTwoColSlide
 from src.models.theme import ThemeModel
 
@@ -20,8 +27,11 @@ _D = {
 }
 
 
-def _p(el: str) -> dict:
-    return {**_D[el], **lc.pos("content_two_col", el)}
+def _p(el: str) -> dict[str, Any] | None:
+    override = lc.pos("content_two_col", el)
+    if override is None:
+        return None
+    return {**_D[el], **override}
 
 
 class ContentTwoColRenderer(BaseLayoutRenderer):
@@ -33,41 +43,45 @@ class ContentTwoColRenderer(BaseLayoutRenderer):
 
         set_slide_background(slide, c.background)  # type: ignore[arg-type]
 
-        p = _p("header_bar")
-        add_colored_box(slide, p["left"], p["top"], p["width"], p["height"], p.get("fill", c.primary))  # type: ignore[arg-type]
+        if (p := _p("header_bar")) is not None:
+            add_colored_box(slide, p["left"], p["top"], p["width"], p["height"], p.get("fill", c.primary))  # type: ignore[arg-type]
 
-        p = _p("title")
         title = truncate_text(model.title, lim.title_max_chars, "content_two_col.title")
-        add_text_box(slide, p["left"], p["top"], p["width"], p["height"], title,  # type: ignore[arg-type]
-                     f.family, p.get("font_size", f.size_subheading), p.get("color", c.text_light),
-                     bold=f.bold_headings)
+        if (p := _p("title")) is not None:
+            add_text_box(slide, p["left"], p["top"], p["width"], p["height"], title,  # type: ignore[arg-type]
+                         f.family, p.get("font_size", f.size_subheading), p.get("color", c.text_light),
+                         bold=p.get("bold", f.bold_headings))
 
-        p = _p("accent_line")
-        add_colored_box(slide, p["left"], p["top"], p["width"], p["height"], p.get("fill", c.accent))  # type: ignore[arg-type]
+        if (p := _p("accent_line")) is not None:
+            add_colored_box(slide, p["left"], p["top"], p["width"], p["height"], p.get("fill", c.accent))  # type: ignore[arg-type]
 
         # Left column
         lct = _p("left_col_title")
         lcb = _p("left_col_bullets")
-        if model.left.title:
-            add_text_box(slide, lct["left"], lct["top"], lct["width"], lct["height"],  # type: ignore[arg-type]
-                         model.left.title, f.family, lct.get("font_size", f.size_body + 1),
-                         lct.get("color", c.accent), bold=True)
-        bullets_top = lcb["top"] if model.left.title else lct["top"]
-        left_bullets = [truncate_text(b, lim.bullet_max_chars, f"left.bullets[{i}]") for i, b in enumerate(model.left.bullets)]
-        add_bullet_list(slide, lcb["left"], bullets_top, lcb["width"], lcb["height"],  # type: ignore[arg-type]
-                        left_bullets, f.family, lcb.get("font_size", f.size_body), lcb.get("color", c.text_dark))
+        if lcb is not None:
+            if model.left.title and lct is not None:
+                add_text_box(slide, lct["left"], lct["top"], lct["width"], lct["height"],  # type: ignore[arg-type]
+                             model.left.title, f.family, lct.get("font_size", f.size_body + 1),
+                             lct.get("color", c.accent), bold=lct.get("bold", True))
+            bullets_top = lcb["top"] if model.left.title else (lct["top"] if lct is not None else lcb["top"])
+            left_bullets = [truncate_text(b, lim.bullet_max_chars, f"left.bullets[{i}]") for i, b in enumerate(model.left.bullets)]
+            add_bullet_list(slide, lcb["left"], bullets_top, lcb["width"], lcb["height"],  # type: ignore[arg-type]
+                            left_bullets, f.family, lcb.get("font_size", f.size_body), lcb.get("color", c.text_dark))
 
-        p = _p("divider")
-        add_colored_box(slide, p["left"], p["top"], p["width"], p["height"], p.get("fill", c.divider))  # type: ignore[arg-type]
+        if (p := _p("divider")) is not None:
+            add_colored_box(slide, p["left"], p["top"], p["width"], p["height"], p.get("fill", c.divider))  # type: ignore[arg-type]
 
         # Right column
         rct = _p("right_col_title")
         rcb = _p("right_col_bullets")
-        if model.right.title:
-            add_text_box(slide, rct["left"], rct["top"], rct["width"], rct["height"],  # type: ignore[arg-type]
-                         model.right.title, f.family, rct.get("font_size", f.size_body + 1),
-                         rct.get("color", c.accent), bold=True)
-        bullets_top = rcb["top"] if model.right.title else rct["top"]
-        right_bullets = [truncate_text(b, lim.bullet_max_chars, f"right.bullets[{i}]") for i, b in enumerate(model.right.bullets)]
-        add_bullet_list(slide, rcb["left"], bullets_top, rcb["width"], rcb["height"],  # type: ignore[arg-type]
-                        right_bullets, f.family, rcb.get("font_size", f.size_body), rcb.get("color", c.text_dark))
+        if rcb is not None:
+            if model.right.title and rct is not None:
+                add_text_box(slide, rct["left"], rct["top"], rct["width"], rct["height"],  # type: ignore[arg-type]
+                             model.right.title, f.family, rct.get("font_size", f.size_body + 1),
+                             rct.get("color", c.accent), bold=rct.get("bold", True))
+            bullets_top = rcb["top"] if model.right.title else (rct["top"] if rct is not None else rcb["top"])
+            right_bullets = [truncate_text(b, lim.bullet_max_chars, f"right.bullets[{i}]") for i, b in enumerate(model.right.bullets)]
+            add_bullet_list(slide, rcb["left"], bullets_top, rcb["width"], rcb["height"],  # type: ignore[arg-type]
+                            right_bullets, f.family, rcb.get("font_size", f.size_body), rcb.get("color", c.text_dark))
+
+        render_layout_extras(slide, "content_two_col", set(_D.keys()), c.accent, model=model)  # type: ignore[arg-type]

@@ -114,11 +114,14 @@ def main() -> int:
             presentation = Presentation(str(template_path))
         else:
             log.warning(
-                "Template '%s' not found — creating blank presentation. "
-                "Run tools/create_template.py to generate it.",
+                "Template '%s' not found — creating blank 16:9 presentation. "
+                "Run tools/create_test_assets.py to generate it.",
                 template_path,
             )
+            from pptx.util import Inches as _Inches
             presentation = Presentation()
+            presentation.slide_width  = _Inches(13.33)
+            presentation.slide_height = _Inches(7.5)
 
         # ── 6. Render ──────────────────────────────────────────────────────────
         from src.renderer.deck_renderer import DeckRenderer

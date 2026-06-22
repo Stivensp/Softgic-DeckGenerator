@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Softgic Deck Generator — Editor de contenido</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="app-shell">
+
+  <aside class="rail">
+    <div class="rail-logo">S</div>
+    <nav class="rail-nav">
+      <div class="rail-item active" title="Editor de contenido">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect></svg>
+      </div>
+      <div class="rail-item disabled" title="Plantillas (proximamente)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+      </div>
+    </nav>
+    <div class="rail-spacer"></div>
+    <div class="rail-item" title="Ayuda">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 1 1 5.83 1c0 2-3 2-3 4"></path><line x1="12" y1="17" x2="12" y2="17.01"></line></svg>
+    </div>
+  </aside>
+
+  <div class="app-main">
+
+    <header class="app-header">
+      <div class="header-title">
+        <strong>Softgic Deck Generator</strong>
+        <span>Editor de contenido</span>
+      </div>
+
+      <label class="header-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="searchSlides" placeholder="Buscar slide por tipo o texto...">
+      </label>
+
+      <div class="header-actions">
+        <label class="field-inline">
+          <span class="field-inline-label">Archivo</span>
+          <select id="deckFileSelect"></select>
+        </label>
+        <button id="newDeckBtn" class="btn btn-ghost">Nuevo deck</button>
+        <label class="field-inline filename-label">
+          <span class="field-inline-label">Guardar como</span>
+          <input type="text" id="deckFilenameInput" placeholder="mi_deck.yaml">
+        </label>
+        <button id="saveDeckBtn" class="btn btn-ghost">Guardar datos</button>
+        <button id="renderDeckBtn" class="btn btn-primary">
+          <span class="btn-label">Generar deck</span>
+        </button>
+      </div>
+
+      <div class="header-profile">
+        <div class="header-bell" title="Notificaciones (decorativo)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg>
+          <span class="dot"></span>
+        </div>
+        <div class="header-avatar" title="Equipo Comercial Softgic">SC</div>
+      </div>
+    </header>
+
+    <div class="workspace">
+
+      <section class="panel panel-slides glass-card glass-card--hoverable">
+        <div class="panel-header">
+          <span>Slides</span>
+          <span id="deckProgress"></span>
+        </div>
+        <div id="slideListPanel" class="slide-list"></div>
+        <div style="padding: 0 var(--sp-2) var(--sp-2)">
+          <button id="addSlideBtn" class="btn btn-add">+ Agregar slide</button>
+        </div>
+      </section>
+
+      <section class="panel panel-canvas glass-card">
+        <div class="panel-header">
+          <span>Vista previa</span>
+          <div class="canvas-toolbar">
+            <button type="button" class="icon-btn" id="zoomOutBtn" title="Alejar">−</button>
+            <span class="canvas-zoom-label" id="zoomLabel">100%</span>
+            <button type="button" class="icon-btn" id="zoomInBtn" title="Acercar">+</button>
+          </div>
+        </div>
+        <div class="canvas-viewport" id="canvasViewport"></div>
+      </section>
+
+      <section class="panel panel-properties glass-card" id="propertiesPanel">
+        <div id="slidesList"></div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<div id="toastContainer" class="toast-container" aria-live="polite"></div>
+<div id="modalRoot" class="modal-root" hidden></div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

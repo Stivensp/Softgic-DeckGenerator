@@ -7,13 +7,13 @@ if TYPE_CHECKING:
     from pptx.slide import Slide
 
     from src.models.slides import (
-        CoverSlide,
-        SectionDividerSlide,
+        ClosingSlide,
         ContentTwoColSlide,
+        CoverSlide,
         PricingTableSlide,
         ProfileCardSlide,
+        SectionDividerSlide,
         StatCalloutSlide,
-        ClosingSlide,
     )
     from src.models.theme import ThemeModel
 

@@ -30,9 +30,9 @@ fonts:
   bold_headings: true
 assets:
   template: "assets/template.pptx"
-  logo_white: "assets/logo_white.png"
-  logo_dark: "assets/logo_dark.png"
-  placeholder_profile: "assets/placeholder_profile.png"
+  logo_white: "images/logo_white.png"
+  logo_dark: "images/logo_dark.png"
+  placeholder_profile: "images/placeholder_profile.png"
 limits:
   title_max_chars: 80
   subtitle_max_chars: 120

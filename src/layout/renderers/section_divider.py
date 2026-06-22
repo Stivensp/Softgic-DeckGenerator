@@ -1,10 +1,18 @@
 from __future__ import annotations
 
+from typing import Any
+
 from pptx.enum.text import PP_ALIGN
 
 from src.layout import layout_config as lc
 from src.layout.base_layout import BaseLayoutRenderer
-from src.layout.helpers import add_colored_box, add_text_box, set_slide_background, truncate_text
+from src.layout.helpers import (
+    add_colored_box,
+    add_text_box,
+    render_layout_extras,
+    set_slide_background,
+    truncate_text,
+)
 from src.models.slides import SectionDividerSlide
 from src.models.theme import ThemeModel
 
@@ -18,8 +26,11 @@ _D = {
 }
 
 
-def _p(el: str) -> dict:
-    return {**_D[el], **lc.pos("section_divider", el)}
+def _p(el: str) -> dict[str, Any] | None:
+    override = lc.pos("section_divider", el)
+    if override is None:
+        return None
+    return {**_D[el], **override}
 
 
 class SectionDividerRenderer(BaseLayoutRenderer):
@@ -29,30 +40,31 @@ class SectionDividerRenderer(BaseLayoutRenderer):
         f = theme.fonts
         lim = theme.limits
 
-        set_slide_background(slide, c.secondary)  # type: ignore[arg-type]
+        set_slide_background(slide, c.background)  # type: ignore[arg-type]
 
-        p = _p("top_line")
-        add_colored_box(slide, p["left"], p["top"], p["width"], p["height"], p.get("fill", c.accent))  # type: ignore[arg-type]
+        if (p := _p("top_line")) is not None:
+            add_colored_box(slide, p["left"], p["top"], p["width"], p["height"], p.get("fill", c.accent))  # type: ignore[arg-type]
 
-        p = _p("right_bar")
-        add_colored_box(slide, p["left"], p["top"], p["width"], p["height"], p.get("fill", c.accent))  # type: ignore[arg-type]
+        if (p := _p("right_bar")) is not None:
+            add_colored_box(slide, p["left"], p["top"], p["width"], p["height"], p.get("fill", c.accent))  # type: ignore[arg-type]
 
-        p = _p("section_number")
-        add_text_box(slide, p["left"], p["top"], p["width"], p["height"],  # type: ignore[arg-type]
-                     model.section_number, f.family, p.get("font_size", f.size_stat),
-                     p.get("color", c.accent), bold=True, align=PP_ALIGN.LEFT)
+        if (p := _p("section_number")) is not None:
+            add_text_box(slide, p["left"], p["top"], p["width"], p["height"],  # type: ignore[arg-type]
+                         model.section_number, f.family, p.get("font_size", f.size_stat),
+                         p.get("color", c.accent), bold=p.get("bold", True), align=PP_ALIGN.LEFT)
 
-        p = _p("section_title")
         section_title = truncate_text(model.section_title, lim.title_max_chars, "section_divider.section_title")
-        add_text_box(slide, p["left"], p["top"], p["width"], p["height"],  # type: ignore[arg-type]
-                     section_title, f.family, p.get("font_size", f.size_heading),
-                     p.get("color", c.text_light), bold=f.bold_headings)
+        if (p := _p("section_title")) is not None:
+            add_text_box(slide, p["left"], p["top"], p["width"], p["height"],  # type: ignore[arg-type]
+                         section_title, f.family, p.get("font_size", f.size_heading),
+                         p.get("color", c.text_dark), bold=p.get("bold", f.bold_headings))
 
-        p = _p("divider")
-        add_colored_box(slide, p["left"], p["top"], p["width"], p["height"], p.get("fill", c.accent))  # type: ignore[arg-type]
+        if (p := _p("divider")) is not None:
+            add_colored_box(slide, p["left"], p["top"], p["width"], p["height"], p.get("fill", c.accent))  # type: ignore[arg-type]
 
-        if model.tagline:
-            p = _p("tagline")
+        if model.tagline and (p := _p("tagline")) is not None:
             add_text_box(slide, p["left"], p["top"], p["width"], p["height"],  # type: ignore[arg-type]
                          model.tagline, f.family, p.get("font_size", f.size_body),
                          p.get("color", c.text_muted), italic=True)
+
+        render_layout_extras(slide, "section_divider", set(_D.keys()), c.accent, model=model)  # type: ignore[arg-type]

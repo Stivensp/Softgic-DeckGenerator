@@ -3,6 +3,10 @@ Pillow>=10.0.0
 pydantic>=2.5.0
 pyyaml>=6.0.1
 
+# editor visual web (frontend/server.py) — opcional, el CLI no depende de esto
+flask>=3.0.0
+flask-cors>=4.0.0
+
 # dev / testing
 pytest>=7.4.0
 pytest-cov>=4.1.0

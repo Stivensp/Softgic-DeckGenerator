@@ -12,6 +12,12 @@ src/                        @softgic/platform-team
 # Configuracion visual — puede editar el equipo de diseno
 config/theme.yaml           @softgic/platform-team @softgic/design-team
 config/layout.yaml          @softgic/platform-team @softgic/design-team
+config/config_visual.pptx   @softgic/design-team
+
+# Imagenes y logos de la marca
+images/                     @softgic/design-team
+
+# Plantilla PowerPoint base
 assets/                     @softgic/design-team
 
 # Ejemplos — puede editar el equipo comercial con revision de plataforma

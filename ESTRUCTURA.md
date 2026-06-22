@@ -12,6 +12,8 @@ Convierte un archivo YAML (o JSON) en un archivo PowerPoint `.pptx` con la ident
 python generate.py --input mi_deck.yaml --output output/propuesta.pptx
 ```
 
+O desde el menú interactivo haciendo doble clic en `menu.bat`.
+
 El resultado es un archivo `.pptx` listo para abrir, compartir o presentar.
 
 ---
@@ -22,28 +24,33 @@ El resultado es un archivo `.pptx` listo para abrir, compartir o presentar.
 SoffgitDeck/
 │
 ├── generate.py                        ← Punto de entrada (CLI)
+├── menu.py                            ← Menú interactivo (todas las opciones en un solo lugar)
+├── menu.bat                           ← Doble clic para abrir el menú en Windows
+├── CODEOWNERS                         ← Quién es responsable de cada parte del proyecto (GitHub)
 ├── requirements.txt                   ← Dependencias Python
 ├── pyproject.toml                     ← Metadatos del paquete y configuración de herramientas
 │
 ├── config/
-│   └── theme.yaml                     ← Todos los valores visuales (colores, fuentes, límites)
+│   ├── theme.yaml                     ← Colores, fuentes y límites de contenido
+│   ├── layout.yaml                    ← Posiciones y estilos visuales de cada elemento
+│   └── config_visual.pptx             ← Editor visual de diseño (generado por open_visual_editor.py)
 │
-├── assets/
-│   ├── template.pptx                  ← Plantilla PowerPoint base (13.33" × 7.5")
+├── images/                            ← Logos y placeholders de la marca
 │   ├── logo_white.png                 ← Logo Softgic para fondos oscuros
 │   ├── logo_dark.png                  ← Logo Softgic para fondos claros
 │   └── placeholder_profile.png        ← Avatar genérico para perfiles sin foto
 │
+├── assets/
+│   └── template.pptx                  ← Plantilla PowerPoint base (13.33" × 7.5")
+│
 ├── examples/
 │   ├── propuesta_comercial.yaml       ← Ejemplo: propuesta con todos los tipos de slide
-│   └── talent_profile.yaml           ← Ejemplo: presentación de equipo técnico
+│   ├── talent_profile.yaml            ← Ejemplo: presentación de equipo técnico
+│   └── costeo.yaml                    ← Ejemplo: estimación de costos con gráficos y tablas
 │
-├── output/                            ← Aquí se guardan los .pptx generados
-│   ├── propuesta_comercial.pptx
-│   └── talent_profile.pptx
+├── output/                            ← Aquí se guardan los .pptx generados (se crea automáticamente)
 │
 ├── logs/                              ← Un .log por cada ejecución (se crea automáticamente)
-│   └── 20260612_103359_deck.log
 │
 ├── src/                               ← Todo el código fuente
 │   ├── exceptions.py                  ← Jerarquía de errores personalizados
@@ -62,7 +69,7 @@ SoffgitDeck/
 │   │   └── deck_parser.py
 │   │
 │   ├── models/                        ← Definición de las estructuras de datos
-│   │   ├── slides.py                  ← 7 modelos de slide + tipo unión
+│   │   ├── slides.py                  ← 9 modelos de slide + tipo unión
 │   │   ├── deck.py                    ← DeckModel (contenedor) + DeckMetadata
 │   │   └── theme.py                   ← ThemeModel (valores visuales tipados)
 │   │
@@ -71,16 +78,19 @@ SoffgitDeck/
 │   │
 │   ├── layout/                        ← Capa 5: renderizadores de slides
 │   │   ├── base_layout.py             ← Clase base abstracta (ABC)
+│   │   ├── layout_config.py           ← Lector de layout.yaml (puente entre config y renderers)
 │   │   ├── registry.py                ← Registro tipo→renderizador
 │   │   ├── helpers.py                 ← Utilidades de dibujo (cajas, texto, imágenes)
 │   │   └── renderers/
-│   │       ├── cover.py
-│   │       ├── section_divider.py
-│   │       ├── content_two_col.py
-│   │       ├── pricing_table.py
-│   │       ├── profile_card.py
-│   │       ├── stat_callout.py
-│   │       └── closing.py
+│   │       ├── cover.py               ← Portada
+│   │       ├── section_divider.py     ← Divisor de sección
+│   │       ├── content_two_col.py     ← Contenido en dos columnas
+│   │       ├── content_one_col.py     ← Contenido en una sola columna
+│   │       ├── pricing_table.py       ← Tabla de precios
+│   │       ├── profile_card.py        ← Tarjeta de perfil
+│   │       ├── stat_callout.py        ← Número destacado
+│   │       ├── closing.py             ← Slide de cierre
+│   │       └── grafico.py             ← Gráfico nativo (barras, líneas, torta)
 │   │
 │   ├── renderer/                      ← Capa 6: orquestador de slides
 │   │   └── deck_renderer.py
@@ -91,7 +101,7 @@ SoffgitDeck/
 │   └── logger/                        ← Logging estructurado (consola + archivo)
 │       └── deck_logger.py
 │
-├── tests/                             ← Suite de tests automatizados (121 tests, 99% cobertura)
+├── tests/                             ← Suite de tests automatizados
 │   ├── conftest.py                    ← Fixtures compartidos por todos los tests
 │   ├── unit/                          ← Tests por módulo aislado
 │   │   ├── test_file_reader.py
@@ -112,8 +122,12 @@ SoffgitDeck/
 │       └── test_output_consistency.py ← Mismo input = mismo output
 │
 └── tools/
-    ├── create_template.py             ← Script original de bootstrap de assets
-    └── create_test_assets.py          ← Script mejorado con logo y avatar más visuales
+    ├── open_visual_editor.py          ← Genera config_visual.pptx para editar el diseño visualmente
+    ├── apply_visual_config.py         ← Lee config_visual.pptx y actualiza layout.yaml
+    ├── inspect_template.py            ← Muestra los layouts disponibles en template.pptx
+    ├── preview_layout.py              ← Vista previa rápida de posiciones
+    ├── create_template.py             ← Script de bootstrap original de assets
+    └── create_test_assets.py          ← Genera template, logos y avatar con Pillow
 ```
 
 ---
@@ -123,14 +137,22 @@ SoffgitDeck/
 Cuando ejecutas `python generate.py --input deck.yaml`, el sistema pasa por **7 capas en secuencia**. Si cualquier capa falla, el proceso se detiene y muestra un error claro. Nunca se escribe un archivo incompleto.
 
 ```
-YAML/JSON  →  FileReader  →  Validator  →  Parser  →  ThemeLoader
-                                                            ↓
-                                                       DeckRenderer
-                                                            ↓
-                                                       PptxExporter  →  .pptx
+YAML/JSON
+    ↓
+[1] FileReader      — Lee el archivo y devuelve un dict Python puro
+    ↓
+[2] Validator       — Valida el dict en 3 pasadas (esquema → reglas → assets)
+    ↓
+[3] Parser          — Convierte el dict a modelos Pydantic tipados
+    ↓
+[4] ThemeLoader     — Carga config/theme.yaml como objeto inmutable
+    ↓
+[5] DeckRenderer    — Por cada slide: llama al renderizador correcto
+    ↓
+[6] (renderers)     — Dibujan el slide usando helpers.py y layout.yaml
+    ↓
+[7] PptxExporter    — Escribe el .pptx al disco de forma atómica
 ```
-
-Cada capa se explica a detalle en las secciones siguientes.
 
 ---
 
@@ -138,99 +160,142 @@ Cada capa se explica a detalle en las secciones siguientes.
 
 ### `generate.py` — El punto de entrada
 
-Este es el único archivo que ejecutas directamente. Hace tres cosas:
+El único archivo que ejecutas directamente desde la terminal. Hace tres cosas:
 
-1. **Procesa los argumentos de la línea de comandos** (`--input`, `--output`, `--theme`, `--version`) usando `argparse`.
-2. **Inicializa el logger** para que todos los módulos puedan escribir en consola y en archivo desde el primer momento.
-3. **Ejecuta el pipeline de 7 pasos** en orden, dentro de un bloque `try/except` que captura cualquier error y termina con código de salida `1` si algo falla, o `0` si todo fue exitoso.
+1. Procesa argumentos de línea de comandos: `--input`, `--output`, `--theme`, `--version`
+2. Inicializa el logger para que todo el sistema pueda escribir desde el primer momento
+3. Ejecuta el pipeline de 7 pasos en orden, con manejo de errores limpio
 
-La función `_build_registry()` registra los 7 renderizadores disponibles. Cada vez que agregas un nuevo tipo de slide, solo agregas una línea aquí.
+La función `_build_registry()` registra los 9 renderizadores disponibles. Cada vez que agregas un nuevo tipo de slide, solo agregas una línea aquí:
 
 ```python
-# Así se registran los renderizadores:
 registry.register("cover",            CoverRenderer)
 registry.register("section_divider",  SectionDividerRenderer)
 registry.register("content_two_col",  ContentTwoColRenderer)
+registry.register("content_one_col",  ContentOneColRenderer)
 registry.register("pricing_table",    PricingTableRenderer)
 registry.register("profile_card",     ProfileCardRenderer)
 registry.register("stat_callout",     StatCalloutRenderer)
 registry.register("closing",          ClosingRenderer)
+registry.register("grafico",          GraficoRenderer)
 ```
 
-### `requirements.txt` — Dependencias
+### `menu.py` y `menu.bat` — El menú interactivo
 
-Lista las librerías externas que necesita el proyecto:
+`menu.bat` es el punto de entrada para uso cotidiano (doble clic en Windows). Llama a `menu.py`, que presenta un menú numerado con todas las operaciones:
 
-| Librería | Para qué sirve |
-|---|---|
-| `python-pptx` | Crear y manipular archivos `.pptx` |
-| `Pillow` | Abrir y validar imágenes (fotos de perfil, logos) |
-| `pydantic` | Definir y validar modelos de datos tipados |
-| `pyyaml` | Leer archivos `.yaml` |
-| `pytest` / `pytest-cov` | Tests y reporte de cobertura |
-| `black` / `ruff` | Formateo y linting de código |
-| `mypy` | Verificación estática de tipos |
+- Generar un deck desde un ejemplo
+- Generar un deck propio
+- Ejecutar los tests
+- Herramientas de diseño (editor visual, aplicar cambios)
+- Regenerar assets
 
-### `pyproject.toml` — Metadatos del paquete
+No forma parte del pipeline — solo llama a los mismos scripts que usarías desde la terminal.
 
-Archivo estándar de Python moderno. Contiene:
-- El nombre y versión del paquete (`softgic-deck-generator v1.0.0`)
-- Que requiere Python 3.11 o superior
-- Las mismas dependencias que `requirements.txt`, pero en formato estándar PEP 517
-- Configuración de cada herramienta: `black` (largo de línea 100), `ruff` (linting), `mypy` (chequeo de tipos estricto), `pytest` (carpeta `tests/`, output verbose)
+### `CODEOWNERS` — Responsabilidades del proyecto (GitHub)
+
+Define qué equipo es responsable de revisar cambios en cada carpeta. GitHub lo usa para asignar revisores automáticamente en pull requests.
+
+```
+config/theme.yaml y layout.yaml  → platform-team + design-team
+assets/                          → design-team
+examples/                        → platform-team + comercial-team
+src/ y generate.py               → platform-team
+```
 
 ---
 
 ## `config/`
 
-### `config/theme.yaml` — El cerebro visual
+### `config/theme.yaml` — Los valores visuales globales
 
-**Este archivo controla el 100% de las decisiones visuales**. Ningún color, tamaño de fuente ni límite está escrito directamente en el código Python. Todo viene de aquí.
+**Controla el 100% de las decisiones visuales de alto nivel.** Ningún color ni tamaño de fuente está escrito directamente en el código Python — todo viene de aquí.
 
 Se divide en 6 secciones:
 
 **`colors`** — 8 colores con nombre semántico:
-- `primary` (`#0A1628`): azul marino oscuro. Fondos de portada, encabezados de tabla.
+- `primary` (`#0A1628`): azul marino oscuro. Fondos de portada, encabezados.
 - `secondary` (`#1E3A5F`): azul medio. Fondo de slides de sección.
-- `accent` (`#00AEEF`): azul Softgic. Barras decorativas, etiquetas, totales.
+- `accent` (`#00AEEF`): azul Softgic. Barras decorativas, totales, etiquetas.
 - `background` (`#FFFFFF`): blanco. Fondos de slides de contenido.
 - `text_dark` / `text_light` / `text_muted`: colores de texto según el fondo.
 - `divider` (`#E5E7EB`): gris claro para líneas y filas alternas de tabla.
 
 **`fonts`** — Familia y tamaños:
-- `family`: fuente del sistema (`Calibri`). Se puede cambiar a `Montserrat` si está instalada.
-- `size_heading` (36pt), `size_subheading` (24pt), `size_body` (14pt), `size_caption` (10pt), `size_stat` (72pt — el número grande del stat callout).
+- `family`: fuente del sistema (`Calibri`).
+- `size_heading` (36pt), `size_subheading` (24pt), `size_body` (14pt), `size_caption` (10pt), `size_stat` (72pt).
 
-**`assets`** — Rutas a los archivos de imagen que usa el sistema:
-- `template`: el `.pptx` base
-- `logo_white`, `logo_dark`: logos para fondos oscuros/claros
-- `placeholder_profile`: avatar cuando no hay foto
+**`assets`** — Rutas a los archivos de imagen que usa el sistema.
 
 **`limits`** — Límites de contenido que el validador y los renderizadores respetan:
-- `title_max_chars` (80): si un título supera esto, se trunca con `…` y se registra una advertencia.
+- `title_max_chars` (80): si un título supera esto, se trunca con `…`.
 - `bullets_per_column_max` (6): máximo de viñetas por columna.
 - `skills_max` (8): máximo de habilidades en una tarjeta de perfil.
 - `pricing_rows_max` (10): máximo de filas en la tabla de precios.
-- `profile_image_min_width/height` (200px): resolución mínima recomendada para fotos.
 
-**`layout_indices`** — Índice del layout de PowerPoint a usar por cada tipo de slide. El índice `6` es el layout "en blanco" estándar que existe en cualquier plantilla de PowerPoint. Si en el futuro Softgic entrega una plantilla corporativa con layouts numerados, solo hay que actualizar estos números aquí.
+**`layout_indices`** — Índice del layout de PowerPoint a usar (el `6` es el layout en blanco estándar).
+
+---
+
+### `config/layout.yaml` — Las posiciones y estilos de cada elemento
+
+**Controla dónde está cada caja y cómo se ve en cada tipo de slide.** Se organiza por tipo de slide y luego por elemento:
+
+```yaml
+cover:
+  title:  { left: 0.8, top: 2.3, width: 11.5, height: 1.5 }
+  logo:   { left: 0.5, top: 0.25, width: 2.2,  height: 0.7 }
+
+content_two_col:
+  header_bar:       { left: 0.0, top: 0.0, width: 13.33, height: 1.2 }
+  left_col_bullets: { left: 0.5, top: 2.05, width: 5.9,  height: 5.1 }
+```
+
+Todas las medidas están en **pulgadas**. El slide mide 13.33" × 7.5".
+
+Además de posición y tamaño, puede guardar overrides de estilo por elemento. Estos los escribe `apply_visual_config.py` después de que editas el editor visual:
+
+```yaml
+cover:
+  title:      { left: 0.8, top: 2.3, width: 11.5, height: 1.5, font_size: 44, color: "FFFFFF" }
+  accent_bar: { left: 0.0, top: 0.0, width: 13.33, height: 0.12, fill: "00AEEF" }
+```
+
+Los renderizadores aplican estos overrides con `p.get("font_size", default)`, `p.get("color", default)`, `p.get("fill", default)`. Si no hay override en `layout.yaml`, usan el valor por defecto del código.
+
+---
+
+## `config/` (completo)
+
+### `config/theme.yaml` — Los valores visuales globales
+*(Ver sección anterior)*
+
+### `config/layout.yaml` — Las posiciones y estilos de cada elemento
+*(Ver sección anterior)*
+
+### `config/config_visual.pptx` — El editor visual
+Archivo generado por `tools/open_visual_editor.py`. Contiene un slide por cada tipo de slide con las cajas y textos reales del diseño. **Se abre y edita en PowerPoint** para mover, redimensionar o cambiar el estilo de los elementos. Después, `tools/apply_visual_config.py` lee los cambios y los escribe en `layout.yaml`. Ver la sección `tools/` para el flujo completo.
+
+Va en `config/` porque es una herramienta de configuración del diseño, no un asset que se usa en la generación de decks.
+
+---
+
+## `images/`
+
+Logos y placeholders de la marca Softgic. Estos archivos son los que los renderizadores insertan dentro de los slides. Sus rutas se configuran en `config/theme.yaml` bajo la sección `assets:`.
+
+### `images/logo_white.png` y `images/logo_dark.png`
+Logo Softgic con fondo transparente. `logo_white` se usa sobre fondos oscuros (portada, cierre); `logo_dark` sobre fondos claros.
+
+### `images/placeholder_profile.png`
+Avatar 500×500px que se usa cuando un slide `profile_card` no especifica una foto.
 
 ---
 
 ## `assets/`
 
-Archivos estáticos que el sistema usa durante el renderizado.
-
 ### `assets/template.pptx`
-La presentación PowerPoint vacía que sirve como base. Tiene dimensiones 13.33" × 7.5" (formato 16:9 estándar). Cuando el sistema genera un deck, abre este archivo y le agrega slides uno a uno. Los slides se construyen completamente desde cero en Python — la plantilla solo aporta las dimensiones y los 11 layouts de PowerPoint disponibles.
-
-Se genera ejecutando `python tools/create_test_assets.py`.
-
-### `assets/logo_white.png` y `assets/logo_dark.png`
-Imágenes PNG con fondo transparente. La versión `white` se usa sobre fondos oscuros (portada, sección), la versión `dark` sobre fondos claros. Actualmente son placeholders generados con Pillow: un cuadrado azul (`#00AEEF`) con un recorte interior y el wordmark "SOFTGIC".
-
-### `assets/placeholder_profile.png`
-Avatar 500×500px con fondo azul medio (`#1E3A5F`), silueta de persona en gris claro y borde circular en azul acento. Se usa cuando un slide `profile_card` no especifica una foto.
+Presentación PowerPoint vacía (13.33" × 7.5"). El sistema la abre y le agrega slides desde cero. La plantilla solo aporta las dimensiones y los layouts de PowerPoint disponibles. Si se borra, se puede regenerar ejecutando `python tools/create_test_assets.py`.
 
 ---
 
@@ -239,11 +304,18 @@ Avatar 500×500px con fondo azul medio (`#1E3A5F`), silueta de persona en gris c
 Archivos YAML de ejemplo listos para generar.
 
 ### `examples/propuesta_comercial.yaml`
-8 slides que demuestran todos los tipos disponibles en un solo deck:
+8 slides que demuestran los tipos principales:
 `cover` → `section_divider` → `content_two_col` → `section_divider` → `stat_callout` → `profile_card` → `pricing_table` → `closing`
 
 ### `examples/talent_profile.yaml`
 8 slides enfocados en presentación de equipo técnico, con múltiples `profile_card`.
+
+### `examples/costeo.yaml`
+11 slides de estimación de costos en tres fases. Demuestra los tipos más recientes:
+- `content_one_col`: listado de alcance en una columna completa
+- `grafico`: gráfico de columnas con costo por fase (5 categorías, 1 serie)
+- Tres `pricing_table` (una por fase), usando el campo `unit` en las filas (horas, servidores, TB/año, sprints)
+- `stat_callout`: inversión total final
 
 ---
 
@@ -251,377 +323,378 @@ Archivos YAML de ejemplo listos para generar.
 
 ### `src/exceptions.py` — Jerarquía de errores
 
-Define 9 excepciones personalizadas con herencia. Esto permite que el código capture errores a distintos niveles de especificidad y que los mensajes de error al usuario sean siempre claros y ubicados.
+9 excepciones personalizadas con herencia. Garantizan que los errores sean siempre claros y ubicados.
 
 ```
 SoftgicDeckError          ← Base de todo
 ├── InputReadError         ← No se pudo leer el archivo de entrada
 ├── ValidationError        ← Error durante la validación
 │   ├── SchemaValidationError   ← Campo faltante, tipo incorrecto
-│   ├── BusinessRuleError       ← Regla de negocio violada (ej: demasiados bullets)
-│   └── AssetValidationError    ← Foto de perfil no existe o es inválida
+│   ├── BusinessRuleError       ← Regla de negocio violada
+│   └── AssetValidationError    ← Foto no existe o es inválida
 ├── ParseError             ← El dict no pudo convertirse a modelos Pydantic
 ├── ThemeLoadError         ← Problema con theme.yaml
-├── UnregisteredLayoutError ← Se pidió un tipo de slide que no tiene renderizador
+├── UnregisteredLayoutError ← Tipo de slide sin renderizador registrado
 ├── RenderError            ← Falló el renderizado de un slide
 └── ExportError            ← No se pudo escribir el archivo .pptx
 ```
 
-Cada error puede llevar el número de slide (`slide_index`) y el campo específico (`field`) que causó el problema, para que el mensaje de error sea lo más preciso posible.
+Cada error puede llevar el número de slide (`slide_index`) y el campo (`field`) que causó el problema.
 
 ---
 
 ### `src/input/` — Capa 1: Lectura del archivo
 
 #### `src/input/formats.py`
-Enum simple con dos valores: `YAML` y `JSON`. Lo usa `FileReader` para saber cómo parsear el archivo.
+Enum con dos valores: `YAML` y `JSON`.
 
 #### `src/input/file_reader.py`
-La clase `FileReader` con su método `read(file_path)`:
-
-1. Verifica que el archivo exista (si no → `InputReadError`)
-2. Detecta el formato por extensión: `.yaml`/`.yml` → YAML, `.json` → JSON (cualquier otra → `InputReadError`)
-3. Lee el texto del archivo en UTF-8
-4. Verifica que no esté vacío
-5. Parsea con `yaml.safe_load()` o `json.loads()`
-6. Verifica que el resultado sea un `dict` (no una lista ni un valor simple)
-7. Devuelve el `dict` en memoria
-
-Produce: un diccionario Python puro, sin tipos específicos todavía.
+`FileReader().read(path)`:
+1. Verifica que el archivo exista
+2. Detecta el formato por extensión
+3. Lee el texto en UTF-8
+4. Parsea con `yaml.safe_load()` o `json.loads()`
+5. Verifica que el resultado sea un `dict`
+6. Devuelve el diccionario Python puro
 
 ---
 
 ### `src/validator/` — Capa 2: Validación en 3 pasadas
 
-La validación ocurre **antes** de convertir los datos a modelos tipados. Esto garantiza mensajes de error claros y ubicados, en lugar de errores internos de Pydantic difíciles de interpretar.
+La validación ocurre **antes** de convertir los datos a modelos tipados. Esto garantiza mensajes de error claros en lugar de errores internos difíciles de interpretar.
 
 #### `src/validator/deck_validator.py`
-El `DeckValidator` es el orquestador. No contiene lógica propia: simplemente ejecuta las 3 pasadas en orden. Si cualquiera lanza una excepción, el proceso se detiene ahí.
-
-```python
-DeckValidator().validate(raw_dict, limits_dict)
-# ↓ ejecuta en orden:
-SchemaRulesValidator().validate(raw_dict)
-BusinessRulesValidator().validate(raw_dict, limits)
-AssetValidator().validate(raw_dict, min_width, min_height)
-```
+Orquestador. Ejecuta las 3 pasadas en orden y se detiene en el primer error.
 
 #### `src/validator/schema_rules.py` — Pasada 1
-Verifica la **estructura y tipos** del diccionario:
-- Que exista la clave `slides` y que sea una lista no vacía
-- Que cada slide sea un `dict` con un campo `type` reconocido
+Verifica **estructura y tipos**:
+- Que exista la clave `slides` como lista no vacía
+- Que cada slide tenga un `type` reconocido (de los 9 disponibles)
 - Que los campos obligatorios de cada tipo estén presentes y no sean `null`
-- Que los campos tengan el tipo correcto (`title` debe ser `str`, `years_experience` debe ser `int`, `totals` debe ser `int` o `float`, etc.)
-- Para `content_two_col`: que cada columna tenga `bullets` no vacío
-- Para `pricing_table`: que cada fila tenga los 4 campos requeridos (`description`, `quantity`, `unit_price`, `total`)
+- Que los campos tengan el tipo correcto (`str`, `int`, `float`, `list`, etc.)
+- Para `pricing_table`: que cada fila tenga `description`, `quantity`, `unit_price`, `total`
 
 #### `src/validator/business_rules.py` — Pasada 2
-Verifica **reglas de negocio** que el esquema no puede detectar:
-- Que los títulos no superen `title_max_chars` (80 chars por defecto)
-- Que las columnas no tengan más de `bullets_per_column_max` (6) viñetas
-- Que la tabla de precios no tenga más de `pricing_rows_max` (10) filas
-- Que `quantity` en precios sea ≥ 0
-- Que el perfil no tenga más de `skills_max` (8) habilidades
-- Que `years_experience` sea ≥ 0
-- Que `contact_email` tenga formato válido (via regex `^[^@\s]+@[^@\s]+\.[^@\s]+$`)
+Verifica **reglas de negocio**:
+- Títulos no superan `title_max_chars` (80 chars)
+- Columnas no superan `bullets_per_column_max` (6) viñetas
+- Tabla de precios no supera `pricing_rows_max` (10) filas
+- `quantity` en precios ≥ 0
+- Perfil no supera `skills_max` (8) habilidades
+- `contact_email` tiene formato válido (regex)
+- Para `pricing_table`: la suma de todos los `row.total` debe coincidir con el campo `totals` declarado (tolerancia 0.01)
+- Para `grafico`: cada serie tiene el mismo número de valores que categorías hay
 
 #### `src/validator/asset_validator.py` — Pasada 3
-Solo actúa si hay slides de tipo `profile_card` con una foto:
-- Verifica que el archivo de la foto exista
-- Abre la imagen con Pillow para confirmar que es una imagen válida (no un PDF disfrazado, por ejemplo)
-- Si las dimensiones son menores a `profile_image_min_width` × `profile_image_min_height`, registra una advertencia (pero NO bloquea — es una recomendación, no un error fatal)
+Solo actúa si hay slides `profile_card` con foto:
+- Verifica que el archivo exista
+- Abre la imagen con Pillow para confirmar que es válida
+- Si la resolución es menor a la mínima, registra una advertencia (no bloquea la generación)
 
 ---
 
 ### `src/models/` — Definición de estructuras de datos
 
-Los modelos son la "forma" tipada que tienen los datos una vez que pasan la validación. Usan Pydantic v2.
+Los modelos son la "forma" tipada que tienen los datos después de pasar la validación. Usan Pydantic v2.
 
 #### `src/models/slides.py`
-Define las 7 clases de slide y el tipo unión `SlideModel`:
+Define las **9 clases de slide** y el tipo unión `SlideModel`:
 
 | Clase | Campos obligatorios | Campos opcionales |
 |---|---|---|
 | `CoverSlide` | `type`, `title` | `subtitle`, `client`, `date`, `author` |
 | `SectionDividerSlide` | `type`, `section_number`, `section_title` | `tagline` |
 | `ContentTwoColSlide` | `type`, `title`, `left`, `right` | — |
+| `ContentOneColSlide` | `type`, `title`, `bullets` | `body_title` |
 | `PricingTableSlide` | `type`, `title`, `currency`, `rows`, `totals` | `notes` |
 | `ProfileCardSlide` | `type`, `name`, `role`, `years_experience`, `seniority`, `skills` | `highlights`, `photo` |
 | `StatCalloutSlide` | `type`, `big_number`, `label` | `context`, `source` |
 | `ClosingSlide` | `type`, `headline`, `contact_name`, `contact_email` | `contact_phone`, `cta` |
+| `GraficoSlide` | `type`, `title`, `categories`, `series` | `chart_title`, `chart_type`, `source` |
 
-El `SlideModel` al final es un **tipo unión discriminado**: Pydantic mira el campo `type` de cada slide y sabe exactamente qué clase usar sin ambigüedad.
+`PricingRow` tiene los campos `description`, `quantity`, `unit_price`, `total` y el campo opcional `unit` para indicar la unidad de medida (horas, días, licencias, etc.).
 
-```python
-SlideModel = Annotated[
-    Union[CoverSlide, SectionDividerSlide, ...],
-    Field(discriminator="type"),
-]
-```
+`SlideModel` es un **tipo unión discriminado**: Pydantic mira el campo `type` y sabe exactamente qué clase usar, sin ambigüedad.
 
 #### `src/models/deck.py`
-`DeckModel` es el contenedor principal: una lista de `SlideModel` más metadatos opcionales. El validador de Pydantic integrado impide que se cree un deck vacío.
-
-`DeckMetadata` registra cuándo se generó el deck, cuál fue el archivo de entrada y qué versión de theme se usó. Es puramente informativo.
+`DeckModel` es el contenedor: lista de slides más metadatos opcionales. Impide que se cree un deck vacío.
 
 #### `src/models/theme.py`
-`ThemeModel` es el objeto tipado que representa `config/theme.yaml`. Tiene la propiedad `model_config = ConfigDict(frozen=True)` que lo hace **inmutable**: una vez cargado, ningún código puede modificar accidentalmente un color o fuente. Si algo lo intenta, Python lanza un error.
-
-Sus submodelos son:
-- `ColorPalette` — los 8 colores
-- `FontConfig` — familia y tamaños
-- `AssetPaths` — rutas a logos y template
-- `Limits` — límites de contenido
-- `SlideLayoutIndex` — índice de layout por tipo de slide
+`ThemeModel` representa `config/theme.yaml` como un objeto **inmutable** (Pydantic `frozen=True`). Una vez cargado, ningún código puede modificar accidentalmente un color o fuente.
 
 ---
 
-### `src/theme/` — Carga del tema
+### `src/theme/` — Capa 4: Carga del tema
 
 #### `src/theme/theme_loader.py`
-`ThemeLoader` carga y valida `config/theme.yaml`:
-1. Verifica que el archivo exista
-2. Parsea el YAML con `yaml.safe_load()`
-3. Valida con `ThemeModel.model_validate()` para que todos los campos sean del tipo correcto
-4. Devuelve el `ThemeModel` inmutable
-
-Si el YAML tiene un campo faltante o un tipo incorrecto (ej: `size_heading: "grande"` en vez de un número), lanza `ThemeLoadError` con el mensaje de Pydantic.
+`ThemeLoader().load(path)`:
+1. Lee `config/theme.yaml`
+2. Valida con `ThemeModel.model_validate()` (tipos correctos, campos presentes)
+3. Devuelve el `ThemeModel` inmutable
 
 ---
 
 ### `src/layout/` — Los renderizadores
 
-Esta es la capa que convierte los modelos de datos en diapositivas de PowerPoint.
+#### `src/layout/layout_config.py` — El puente entre `layout.yaml` y los renderers
+
+Lee `config/layout.yaml` una sola vez (caché en memoria) y provee los datos a los renderizadores:
+
+```python
+lc.pos("cover", "title")
+# → { left: 0.8, top: 2.3, width: 11.5, height: 1.5 }
+# Si hay overrides en layout.yaml: también incluye font_size, color o fill
+```
+
+Si `layout.yaml` no existe o el elemento no está definido, devuelve `{}` y los renderers usan sus valores por defecto.
 
 #### `src/layout/base_layout.py`
-Define la clase abstracta `BaseLayoutRenderer` con un único método abstracto:
-
+Clase abstracta con un solo método:
 ```python
-def render(self, slide: Slide, model: SlideModel, theme: ThemeModel) -> None: ...
+def render(self, slide, model, theme) -> None: ...
 ```
-
-Todos los renderizadores deben implementar este método. Esto garantiza que el sistema puede llamar `.render()` en cualquier renderizador sin saber de qué tipo es — el principio de sustitución de Liskov.
+Todos los renderizadores lo implementan, lo que permite llamarlos sin saber de qué tipo son.
 
 #### `src/layout/registry.py`
-`LayoutRegistry` es un diccionario que mapea `str → clase de renderizador`:
-
-```python
-registry.register("cover", CoverRenderer)
-# Internamente: {"cover": CoverRenderer, ...}
-
-renderer_class = registry.get("cover")  # → CoverRenderer
-renderer_class().render(slide, model, theme)
-```
-
-Si se pide un tipo que no está registrado, lanza `UnregisteredLayoutError` con la lista de tipos disponibles. Esto hace posible agregar nuevos tipos de slide **sin modificar ningún código existente** — solo registras el nuevo renderizador.
+Diccionario `str → clase de renderizador`. Si se pide un tipo no registrado, lanza `UnregisteredLayoutError` con la lista de tipos disponibles.
 
 #### `src/layout/helpers.py`
-Utilidades de bajo nivel que todos los renderizadores comparten. Abstrae la API de python-pptx en funciones simples y legibles:
+Utilidades de bajo nivel que todos los renderizadores comparten:
 
 | Función | Qué hace |
 |---|---|
 | `hex_to_rgb("#00AEEF")` | Convierte hex a `RGBColor` de python-pptx |
-| `set_slide_background(slide, color_hex)` | Pinta el fondo del slide con un color sólido |
-| `add_colored_box(slide, left, top, width, height, color_hex)` | Agrega un rectángulo de color sin borde |
-| `add_text_box(slide, left, top, width, height, text, ...)` | Agrega una caja de texto con fuente, tamaño, color y alineación |
-| `add_bullet_list(slide, left, top, width, height, items, ...)` | Agrega una lista de viñetas con `•` como prefijo |
-| `add_image(slide, path, left, top, width, height, fallback)` | Inserta una imagen; si no existe, usa el fallback |
-| `truncate_text(text, max_chars, field_name)` | Recorta el texto si supera el límite y registra WARNING |
+| `set_slide_background(slide, color_hex)` | Pinta el fondo del slide |
+| `add_colored_box(slide, left, top, width, height, color_hex)` | Rectángulo de color |
+| `add_text_box(slide, left, top, width, height, text, ...)` | Caja de texto con fuente, tamaño, color |
+| `add_bullet_list(slide, left, top, width, height, items, ...)` | Lista de viñetas con `•` |
+| `add_image(slide, path, left, top, width, height, fallback)` | Imagen; usa fallback si no existe |
+| `truncate_text(text, max_chars, field_name)` | Recorta si supera el límite y registra WARNING |
 
-Todas las medidas van en **pulgadas** porque python-pptx trabaja internamente en EMU (English Metric Units) y la función `Inches()` hace la conversión.
+Todas las medidas van en **pulgadas** porque python-pptx trabaja en EMU y `Inches()` hace la conversión.
 
-#### `src/layout/renderers/` — Los 7 renderizadores
+---
 
-Cada archivo renderiza un tipo de slide específico. Reciben `(slide, model, theme)` y usan las funciones de `helpers.py` y los valores de `theme` para construir el slide. **Ningún valor visual está hardcodeado en estos archivos** — todo viene de `theme.colors`, `theme.fonts`, `theme.limits`.
+#### `src/layout/renderers/` — Los 9 renderizadores
+
+Cada renderizador recibe `(slide, model, theme)` y construye el slide usando `helpers.py`. Ningún valor visual está hardcodeado: todo viene de `theme` o de `layout.yaml`.
+
+**Patrón común en todos los renderers:**
+
+Cada renderer tiene un diccionario `_D` con los valores por defecto de cada elemento, y una función `_p()` que los fusiona con los overrides de `layout.yaml` (los overrides tienen prioridad):
+
+```python
+_D = {
+    "title": {"left": 0.8, "top": 2.3, "width": 11.5, "height": 1.5, "font_size": 40},
+}
+
+def _p(el: str) -> dict:
+    return {**_D[el], **lc.pos("cover", el)}   # layout.yaml sobreescribe _D
+
+# En el render:
+p = _p("title")
+add_text_box(slide, p["left"], p["top"], ...,
+             p.get("font_size", default),
+             p.get("color", default))
+```
+
+Esto significa que puedes cambiar posición, tamaño, color o fuente de cualquier elemento editando `layout.yaml` — sin tocar el código Python.
+
+---
 
 **`cover.py` — Portada**
-- Fondo: `colors.primary` (azul marino)
-- Barra superior: rectángulo delgado `colors.accent`
-- Logo: esquina superior izquierda, `assets.logo_white`
-- Título: texto grande blanco, tamaño `fonts.size_heading + 4`
-- Subtítulo: color `colors.accent`, tamaño reducido
-- Línea divisora: rectángulo `colors.accent` de 0.04" de alto
-- Cliente: texto muted en la parte media
-- Autor + fecha: esquina inferior derecha, separados por `|`
+- Fondo `colors.primary` (azul marino oscuro)
+- Barra delgada `colors.accent` arriba
+- Logo Softgic en esquina superior izquierda
+- Título grande, subtítulo, línea divisora, nombre del cliente, autor + fecha
 
 **`section_divider.py` — Divisor de sección**
-- Fondo: `colors.secondary` (azul medio)
-- Barra vertical derecha: `colors.accent`
-- Línea superior: `colors.accent`
-- Número de sección: tamaño `fonts.size_stat` (72pt), color `colors.accent`
-- Título: tamaño `fonts.size_heading`, color blanco
-- Línea divisora horizontal
-- Tagline: opcional, cursiva, color muted
+- Fondo `colors.secondary` (azul medio)
+- Barra vertical derecha + línea superior en `colors.accent`
+- Número de sección en 72pt, título de sección, tagline opcional en cursiva
 
 **`content_two_col.py` — Contenido en dos columnas**
-- Fondo: `colors.background` (blanco)
-- Barra de encabezado: `colors.primary`
-- Título del slide en la barra
-- Columna izquierda: título opcional + lista de bullets
-- Columna derecha: igual
-- Línea divisora central en `colors.accent`
+- Barra de encabezado `colors.primary` con título del slide
+- Columna izquierda y derecha: cada una con título opcional y lista de bullets
+- Línea divisora vertical central `colors.accent`
+
+**`content_one_col.py` — Contenido en una sola columna**
+- Igual estructura que `content_two_col` pero el cuerpo ocupa todo el ancho del slide
+- Campo `body_title` opcional para un subtítulo antes de los bullets
+- Útil para listados largos, alcances de proyecto, requisitos técnicos
 
 **`pricing_table.py` — Tabla de precios**
-- Fondo: `colors.background`
-- Encabezado: `colors.primary`
-- Usa `slide.shapes.add_table()` de python-pptx para crear la tabla real
-- Fila de encabezado: fondo `colors.primary`, texto blanco, negrita
-- Filas de datos: fondo alternado `colors.background` / `colors.divider`
-- Fila de totales: fondo `colors.accent`, texto blanco, negrita
-- Nota al pie: opcional, cursiva, color muted
+- Tabla real de PowerPoint con 5 columnas: Descripción, Cant., Unidad, Precio Unit., Total
+- La columna "Unidad" muestra el campo opcional `unit` de cada fila (horas, licencias, sprints, etc.)
+- Filas de datos con fondo alternado
+- Fila de totales con fondo `colors.accent` y texto blanco
+- Valida que la suma de `row.total` coincida con el campo `totals` declarado
 
 **`profile_card.py` — Tarjeta de perfil**
-- Panel izquierdo (≈4"): fondo `colors.secondary`, foto o avatar, nombre/rol/seniority/experiencia
-- Panel derecho (≈8"): etiquetas de skills como cajas `colors.accent`, lista de highlights
+- Panel izquierdo (~4"): foto o avatar, nombre, rol, seniority, años de experiencia
+- Panel derecho (~8"): etiquetas de skills como cajas `colors.accent`, lista de highlights
 
 **`stat_callout.py` — Número destacado**
-- Fondo: `colors.primary`
-- Número gigante centrado: `fonts.size_stat` (72pt), color `colors.accent`
-- Label debajo: `fonts.size_heading`, blanco
-- Contexto y fuente: texto muted pequeño
+- Fondo `colors.primary`
+- Número gigante centrado (72pt) en `colors.accent`
+- Label debajo, contexto y fuente opcionales
 
-**`closing.py` — Cierre**
-- Fondo: `colors.primary`
-- Headline grande centrado: blanco
-- Bloque de contacto: nombre, email, teléfono (opcional)
-- CTA (call to action): fondo `colors.accent`, texto blanco
-- Logo: esquina inferior
+**`closing.py` — Slide de cierre**
+- Fondo `colors.primary` con dos barras `colors.accent` arriba y abajo
+- Headline grande centrado
+- Bloque de contacto: nombre, email, teléfono opcional
+- CTA (call to action) con fondo `colors.accent`
+
+**`grafico.py` — Gráfico nativo**
+- Usa python-pptx para insertar un gráfico real (no una imagen estática)
+- Tipos soportados vía campo `chart_type` en el YAML: `column` (barras verticales), `bar` (barras horizontales), `line` (líneas), `pie` (torta)
+- Las categorías se definen en una lista; las series son pares `{name, values[]}`
+- Los colores de series se asignan desde una paleta interna que rota si hay más de 5 series
+- Campo `source` opcional para citar la fuente del dato
 
 ---
 
 ### `src/renderer/` — Capa 6: Orquestador
 
 #### `src/renderer/deck_renderer.py`
-`DeckRenderer` itera sobre todos los slides del `DeckModel` y los renderiza uno a uno:
+Por cada slide en el deck:
+1. Obtiene el índice de layout del theme
+2. Agrega el slide a la presentación: `presentation.slides.add_slide(layout)`
+3. Busca el renderizador: `registry.get(slide_type)` → ej. `GraficoRenderer`
+4. Llama: `GraficoRenderer().render(slide, model, theme)`
+5. Si falla → `RenderError` con el número de slide y el error original
 
-```
-Para cada slide en deck.slides:
-  1. Obtener el índice de layout del theme (layout_indices.cover = 6)
-  2. Si el índice es inválido, usar el último disponible y registrar WARNING
-  3. Agregar el slide a la presentación: presentation.slides.add_slide(layout)
-  4. Buscar el renderizador: registry.get(slide_type) → CoverRenderer
-  5. Instanciar y llamar: CoverRenderer().render(slide, model, theme)
-  6. Si falla → RenderError con el número de slide y el error original
-  7. Registrar: "Slide 1/8 rendered: cover"
-```
-
-Al terminar, devuelve el objeto `Presentation` de python-pptx con todos los slides ya agregados.
+Devuelve el objeto `Presentation` de python-pptx con todos los slides ya construidos.
 
 ---
 
 ### `src/exporter/` — Capa 7: Escritura al disco
 
 #### `src/exporter/pptx_exporter.py`
-`PptxExporter` escribe el archivo final de forma **atómica**. Esto significa que si algo falla durante la escritura (disco lleno, error de permisos), el archivo de destino anterior no queda corrupto.
-
-El mecanismo:
-1. Crea la carpeta de destino si no existe (`mkdir -p`)
-2. Crea un archivo temporal en la misma carpeta (`tempfile.mkstemp`)
-3. Guarda el `.pptx` en el temporal con `presentation.save(tmp_path)`
-4. Si el guardado fue exitoso: `os.replace(tmp_path, output_path)` — operación atómica en el sistema de archivos
-5. Si algo falla: elimina el temporal y lanza `ExportError`
-6. Registra el tamaño final en KB
+Escribe el archivo final de forma **atómica**: primero guarda en un temporal, luego hace `os.replace(tmp, destino)`. Si algo falla durante la escritura, el archivo anterior no queda corrupto.
 
 ---
 
 ### `src/logger/` — Logging estructurado
 
 #### `src/logger/deck_logger.py`
-`DeckLogger` configura Python's `logging` estándar para el proyecto entero:
+- **Consola**: nivel INFO — muestra el progreso al usuario
+- **Archivo**: nivel DEBUG — guarda detalles para diagnóstico
+- **Nombre del archivo**: `logs/YYYYMMDD_HHMMSS_deck.log` — uno por ejecución, nunca se sobreescriben
+- **Formato**: `[2026-06-12 10:33:59] [INFO] [softgic.renderer] Rendering 8 slide(s)...`
 
-- **Un solo logger raíz** llamado `"softgic"`. Todos los submódulos usan `logging.getLogger("softgic.nombre_modulo")`, lo que los convierte en hijos automáticos.
-- **Consola**: nivel INFO — muestra el progreso de cada paso al usuario.
-- **Archivo**: nivel DEBUG — guarda todo incluyendo detalles internos para diagnóstico.
-- **Nombre del archivo**: `logs/YYYYMMDD_HHMMSS_deck.log` — uno por ejecución, nunca se sobreescriben.
-- **Formato**: `[2026-06-12 10:33:59] [INFO   ] [softgic.renderer] Rendering 8 slide(s)...`
+---
 
-El logger se inicializa una vez en `generate.py` y desde ese momento todos los módulos pueden escribir solo llamando `logging.getLogger("softgic.nombre")`.
+## `tools/` — Herramientas de utilidad
+
+Scripts auxiliares que no forman parte del pipeline de generación.
+
+### El flujo del editor visual (cómo cambiar el diseño sin tocar código)
+
+```
+[1] python tools/open_visual_editor.py
+    → Genera config/config_visual.pptx
+    → Contiene 9 slides con el diseño real: colores, fuentes y textos de muestra
+
+[2] Abres config_visual.pptx en PowerPoint
+    → Mueves cajas, cambias tamaños, ajustas colores o fuentes a gusto
+    → Guardas el archivo
+
+[3] python tools/apply_visual_config.py
+    → Lee config_visual.pptx shape por shape
+    → Extrae posición (left/top/width/height), font_size, color de texto y fill de relleno
+    → Actualiza config/layout.yaml con los nuevos valores
+
+[4] La próxima vez que generes un deck
+    → Los renderers leen layout.yaml y aplican tus cambios automáticamente
+```
+
+---
+
+#### `tools/open_visual_editor.py`
+Genera `config/config_visual.pptx`. Cada slide muestra el tipo correspondiente con:
+- Rectángulos con los colores reales del tema
+- Cajas de texto con textos de muestra, la fuente correcta y los tamaños reales
+- Todas las formas nombradas internamente para que `apply_visual_config.py` sepa qué elemento es cada una
+
+#### `tools/apply_visual_config.py`
+Lee `config/config_visual.pptx` slide por slide y por cada shape:
+- Si es una caja de texto (tipo 17): extrae `left`, `top`, `width`, `height`, `font_size` y `color`
+- Si es una forma con relleno (tipo 1): extrae `left`, `top`, `width`, `height` y `fill`
+
+Luego escribe estos valores en `config/layout.yaml`, actualizando solo los elementos que encontró.
+
+#### `tools/inspect_template.py`
+Muestra los layouts disponibles en `assets/template.pptx` con su índice y nombre. Útil si cambias la plantilla base y necesitas saber qué número tiene el layout en blanco.
+
+#### `tools/preview_layout.py`
+Vista previa rápida de las posiciones definidas en `layout.yaml` para un tipo de slide específico.
+
+#### `tools/create_test_assets.py`
+Genera los assets de arranque del proyecto:
+- `template.pptx`: presentación base 13.33" × 7.5" con 11 layouts
+- `logo_white.png` y `logo_dark.png`: logos placeholder generados con Pillow
+- `placeholder_profile.png`: silueta de persona sobre fondo `#1E3A5F`
+
+Se ejecuta **una sola vez** antes de generar decks por primera vez, o cuando se quieren regenerar los assets.
 
 ---
 
 ## `tests/` — Tests automatizados
 
-### `tests/conftest.py` — Fixtures compartidos
+### `tests/conftest.py`
+Archivo especial de pytest. Define fixtures disponibles en todos los tests sin importarlos:
+- `minimal_theme`: un `ThemeModel` completo con valores válidos para tests
+- `blank_presentation` y `blank_slide`: objetos de python-pptx listos para usar
+- 9 fixtures de slide (uno por tipo), ya construidos con datos válidos
+- `full_deck`: un `DeckModel` con los 9 slides para tests de integración
+- `minimal_raw_deck` y `full_raw_deck`: diccionarios Python para tests del validador
 
-`conftest.py` es un archivo especial de pytest. Todo lo que se define aquí está disponible automáticamente en todos los archivos de test sin necesidad de importarlo.
-
-Define:
-- **`minimal_theme`**: un `ThemeModel` completo con valores válidos para tests. Evita que cada test tenga que construir el theme desde cero.
-- **`blank_presentation`** y **`blank_slide`**: objetos de python-pptx para tests de renderizadores.
-- **7 fixtures de slide**: `cover_model`, `section_divider_model`, etc. — uno por cada tipo, ya construidos con datos válidos.
-- **`full_deck`**: un `DeckModel` con los 7 slides, para tests de integración.
-- **`minimal_raw_deck`** y **`full_raw_deck`**: diccionarios Python (no modelos), para tests del validador y parser.
-
-### `tests/unit/` — Tests unitarios
-
-Cada módulo tiene su propio archivo de test. Un test unitario prueba **una sola unidad** de código de forma aislada.
+### `tests/unit/`
+Un archivo de test por módulo. Cada test prueba una sola unidad de forma aislada.
 
 | Archivo | Qué prueba |
 |---|---|
 | `test_file_reader.py` | Lectura de YAML/JSON, extensiones inválidas, archivo vacío |
 | `test_theme_loader.py` | Carga de theme.yaml, YAML malformado, campos faltantes |
 | `test_validator.py` | Las 3 pasadas de validación: casos válidos e inválidos |
-| `test_schema_branches.py` | Ramas específicas del validador de esquema (tipos erróneos, nulls) |
-| `test_parser.py` | Conversión de dict a DeckModel, error cuando el dict es inválido |
-| `test_registry.py` | Registro y obtención de renderizadores, error en tipo desconocido |
-| `test_renderer.py` | DeckRenderer: presentación con 7 slides, error en renderer, índice fuera de rango |
+| `test_schema_branches.py` | Ramas específicas del validador de esquema |
+| `test_parser.py` | Conversión de dict a DeckModel |
+| `test_registry.py` | Registro y obtención de renderizadores |
+| `test_renderer.py` | DeckRenderer: presentación con slides, error en renderer |
 | `test_exporter.py` | Escritura del .pptx, creación de carpetas, fallo atómico |
 | `test_logger.py` | Inicialización del logger, handlers de consola y archivo |
 | `test_asset_validator.py` | Foto no encontrada, imagen inválida, resolución baja |
 | `test_renderers/test_cover.py` | Renderizador de portada: happy path, campos opcionales, truncado |
-| `test_renderers/test_all_renderers.py` | Los otros 6 renderizadores con los mismos patrones |
+| `test_renderers/test_all_renderers.py` | Los demás renderizadores con los mismos patrones |
 
-### `tests/integration/` — Tests de integración
+### `tests/integration/`
+**`test_full_pipeline.py`**: ejecuta el pipeline completo con archivos reales y verifica que el `.pptx` resultante sea válido con el número correcto de slides.
 
-Los tests de integración ejecutan el **pipeline completo** de principio a fin con archivos reales.
-
-**`test_full_pipeline.py`**: ejecuta `FileReader → Validator → Parser → DeckRenderer → PptxExporter` y verifica que el archivo `.pptx` resultante sea un archivo válido con el número correcto de slides.
-
-**`test_output_consistency.py`**: ejecuta el mismo input dos veces y verifica que los archivos resultantes sean idénticos byte a byte. Esto garantiza que el sistema sea **determinista**: mismo input = mismo output, siempre.
-
----
-
-## `tools/`
-
-Scripts de utilidad para la configuración inicial. No forman parte del pipeline de generación.
-
-### `tools/create_template.py`
-El script original de bootstrap. Crea `assets/template.pptx` con las dimensiones correctas y las imágenes placeholder básicas usando Pillow.
-
-### `tools/create_test_assets.py`
-Versión mejorada. Genera:
-- `template.pptx`: presentación base 13.33" × 7.5" con 11 layouts
-- `logo_white.png`: cuadrado `#00AEEF` + texto "SOFTGIC" en blanco, fondo transparente
-- `logo_dark.png`: mismo pero texto en `#0A1628`
-- `placeholder_profile.png`: silueta de persona sobre fondo `#1E3A5F` con borde circular azul
-
-Se ejecuta **una sola vez** antes de generar decks por primera vez, o cuando se quieren regenerar los assets.
+**`test_output_consistency.py`**: ejecuta el mismo input dos veces y verifica que los archivos sean idénticos byte a byte. Garantiza que el sistema sea determinista.
 
 ---
 
 ## Reglas de diseño que guían todo el sistema
 
-Estas reglas fueron establecidas al inicio del proyecto y están enforced por la arquitectura:
-
 **N01 — El template manda**: ningún renderizador inventa layouts. Todo viene de `template.pptx` y los índices en `theme.yaml`.
 
-**N02 — Cero hardcoding visual**: si buscas un color hexadecimal o un tamaño de fuente en cualquier archivo `.py`, no lo encontrarás. Todo va a través de `ThemeModel`.
+**N02 — Cero hardcoding visual**: si buscas un color hexadecimal o un tamaño de fuente en cualquier archivo `.py`, no lo encontrarás. Todo pasa por `ThemeModel` o `layout.yaml`.
 
 **N03 — Full validation before render**: el sistema valida completamente antes de tocar python-pptx. Si hay un error, falla rápido con un mensaje claro.
 
-**N04 — Same input = same output**: el sistema es determinista. La misma prueba pasa dos veces en `test_output_consistency.py`.
+**N04 — Same input = same output**: el sistema es determinista. `test_output_consistency.py` lo garantiza.
 
-**N05 — Every execution must produce logs**: `DeckLogger` se inicializa en el primer paso de `generate.py` y escribe un archivo en `logs/` en cada ejecución, sin excepción.
+**N05 — Every execution must produce logs**: `DeckLogger` escribe un archivo en `logs/` en cada ejecución, sin excepción.
 
 ---
 
 ## Cómo agregar un nuevo tipo de slide
 
-Solo se tocan **4 archivos**, sin modificar ningún código existente:
+Se tocan **5 lugares**, sin modificar ningún código existente:
 
-1. **`src/models/slides.py`** — Agregar la clase `class MiSlide(BaseModel)` y añadirla al `Union` de `SlideModel`
-2. **`src/layout/renderers/mi_slide.py`** — Crear el renderizador que extiende `BaseLayoutRenderer`
-3. **`generate.py`** — Agregar `registry.register("mi_slide", MiSlideRenderer)`
-4. **`config/theme.yaml`** — Agregar `mi_slide: 6` bajo `layout_indices`
-
-El validador de esquema en `schema_rules.py` necesita que también agregues la entrada en `REGISTERED_TYPES`, `REQUIRED_FIELDS` y `FIELD_TYPES`.
+1. **`src/models/slides.py`** — Agregar la clase del modelo y añadirla al `Union` de `SlideModel`
+2. **`src/validator/schema_rules.py`** — Agregar el tipo a `REGISTERED_TYPES`, `REQUIRED_FIELDS` y `FIELD_TYPES`
+3. **`src/layout/renderers/mi_slide.py`** — Crear el renderizador con su `_D`, su `_p()` y la lógica de render
+4. **`generate.py`** — Agregar `registry.register("mi_slide", MiSlideRenderer)`
+5. **`config/layout.yaml`** — Agregar la sección con las posiciones por defecto del nuevo tipo

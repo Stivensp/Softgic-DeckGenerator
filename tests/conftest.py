@@ -3,6 +3,7 @@ from __future__ import annotations
 import pytest
 from pptx import Presentation
 
+from src.layout import layout_config
 from src.models.deck import DeckModel, DeckMetadata
 from src.models.slides import (
     BulletColumn,
@@ -23,6 +24,23 @@ from src.models.theme import (
     SlideLayoutIndex,
     ThemeModel,
 )
+
+
+@pytest.fixture(autouse=True)
+def isolated_layout_config():
+    """Aisla los tests del estado real y mutable de config/generated/layout.yaml.
+
+    Sin esto, los tests de renderers dependen de lo que el usuario tenga
+    actualmente en su editor visual (elementos ocultos, posiciones custom,
+    etc.) — un cambio legitimo en el proyecto del usuario rompe la suite
+    sin que haya ningun bug de codigo. Forzamos una cache vacia (todos los
+    elementos canonicos usan sus defaults de _D, nada oculto) para que los
+    tests sean deterministas e independientes del proyecto real.
+    """
+    original = layout_config._CACHE
+    layout_config._CACHE = {}
+    yield
+    layout_config._CACHE = original
 
 
 @pytest.fixture
@@ -50,9 +68,9 @@ def minimal_theme() -> ThemeModel:
         ),
         assets=AssetPaths(
             template="assets/template.pptx",
-            logo_white="assets/logo_white.png",
-            logo_dark="assets/logo_dark.png",
-            placeholder_profile="assets/placeholder_profile.png",
+            logo_white="images/logo_white.png",
+            logo_dark="images/logo_dark.png",
+            placeholder_profile="images/placeholder_profile.png",
         ),
         limits=Limits(
             title_max_chars=80,

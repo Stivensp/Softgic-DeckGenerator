@@ -17,7 +17,7 @@ output/*.pptx
 *.pptx
 !assets/template.pptx
 # Config visual generado por open_visual_editor.py — no va al repo
-assets/config_visual.pptx
+config/config_visual.pptx
 # Secrets
 .env
 secrets.yaml

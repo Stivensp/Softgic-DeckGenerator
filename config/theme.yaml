@@ -26,9 +26,9 @@ fonts:
 
 assets:
   template: "assets/template.pptx"
-  logo_white: "assets/logo_white.png"
-  logo_dark: "assets/logo_dark.png"
-  placeholder_profile: "assets/placeholder_profile.png"
+  logo_white: "images/logo_white.png"
+  logo_dark: "images/logo_dark.png"
+  placeholder_profile: "images/placeholder_profile.png"
 
 limits:
   title_max_chars: 80
@@ -47,7 +47,9 @@ layout_indices:
   cover: 6
   section_divider: 6
   content_two_col: 6
+  content_one_col: 6
   pricing_table: 6
   profile_card: 6
   stat_callout: 6
   closing: 6
+  grafico: 6

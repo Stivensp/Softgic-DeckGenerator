@@ -37,9 +37,9 @@ def create_template(output_path: Path = Path("assets/template.pptx")) -> None:
     print("Layout 6 = blank (default for all slide types)")
 
 
-def create_placeholder_images(assets_dir: Path = Path("assets")) -> None:
+def create_placeholder_images(images_dir: Path = Path("images")) -> None:
     """Creates minimal placeholder PNG files for logo and profile photo."""
-    assets_dir.mkdir(parents=True, exist_ok=True)
+    images_dir.mkdir(parents=True, exist_ok=True)
 
     try:
         from PIL import Image, ImageDraw
@@ -48,11 +48,11 @@ def create_placeholder_images(assets_dir: Path = Path("assets")) -> None:
         return
 
     # Logo white (white text on transparent bg)
-    _create_logo(assets_dir / "logo_white.png", bg=(10, 22, 40), fg=(255, 255, 255))
+    _create_logo(images_dir / "logo_white.png", bg=(10, 22, 40), fg=(255, 255, 255))
     # Logo dark (dark text on white bg)
-    _create_logo(assets_dir / "logo_dark.png", bg=(255, 255, 255), fg=(10, 22, 40))
+    _create_logo(images_dir / "logo_dark.png", bg=(255, 255, 255), fg=(10, 22, 40))
     # Placeholder profile photo
-    _create_profile_placeholder(assets_dir / "placeholder_profile.png")
+    _create_profile_placeholder(images_dir / "placeholder_profile.png")
 
 
 def _create_logo(path: Path, bg: tuple, fg: tuple) -> None:
@@ -80,6 +80,6 @@ def _create_profile_placeholder(path: Path) -> None:
 
 if __name__ == "__main__":
     create_template()
-    create_placeholder_images()
+    create_placeholder_images(Path("images"))
     print("\nSetup complete. You can now run:")
     print("  python generate.py --input examples/propuesta_comercial.yaml --output output/deck.pptx")

@@ -1,0 +1,85 @@
+# config/generated/input_template.yaml — generado automaticamente por 'Aplicar cambios del editor visual'
+# Copia este archivo, renombralo y reemplaza los valores de ejemplo con datos reales.
+# Solo incluye campos cuyo elemento esta VISIBLE en tu editor visual actual.
+#
+# Campos omitidos (su elemento esta oculto/reemplazado en tu diseño,
+# no tienen ningun efecto en el deck generado):
+#   cover: subtitle, client, date, author
+#   section_divider: tagline
+#   content_one_col: body_title
+#   pricing_table: notes
+#   profile_card: highlights
+#   stat_callout: context, source
+#   closing: contact_phone, cta
+#   grafico: chart_title, chart_type, source
+#
+# Campos dinamicos NUEVOS detectados (formas sin campo correspondiente en
+# el modelo — ya estan agregados abajo con su valor de muestra):
+#   cover: Image 0, Text 1, Text 2, Text 3, Text 4, Text 5, Text 6, Text 7, Text 8, Text 9
+#   section_divider: Text 2, Text 4, Text 5, Text 6
+
+slides:
+- type: cover
+  title: ''
+  Image 0: config/images/cover/image_0.png
+  Text 1: PROPUESTA · PITCH LATAM
+  Text 2: Transformación Digital & Cognitiva
+  Text 3: Propuesta de servicios y costeo de proyecto a la medida de tu negocio.
+  Text 4: CLIENTE
+  Text 5: Industrias del Pacífico S.A.
+  Text 6: FECHA
+  Text 7: Junio 2026
+  Text 8: PREPARADO POR
+  Text 9: Equipo Comercial Softgic
+- type: section_divider
+  section_number: ''
+  section_title: ''
+  Text 2: '01'
+  Text 4: SECCIÓN
+  Text 5: Quiénes somos
+  Text 6: Hacemos las cosas más fáciles con tecnología.
+- type: content_two_col
+  title: ''
+  left:
+    title: ''
+    bullets:
+    - ''
+  right:
+    title: ''
+    bullets:
+    - ''
+- type: content_one_col
+  title: ''
+  bullets:
+  - ''
+- type: pricing_table
+  title: ''
+  currency: ''
+  rows:
+  - description: ''
+    quantity: 0
+    unit_price: 0.0
+    total: 0.0
+  totals: 0.0
+- type: profile_card
+  name: ''
+  role: ''
+  years_experience: 0
+  seniority: ''
+  skills:
+  - ''
+- type: stat_callout
+  big_number: ''
+  label: ''
+- type: closing
+  headline: ''
+  contact_name: ''
+  contact_email: ''
+- type: grafico
+  title: ''
+  categories:
+  - ''
+  series:
+  - name: ''
+    values:
+    - 0

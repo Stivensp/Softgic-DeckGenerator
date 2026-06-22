@@ -30,6 +30,7 @@ class BusinessRulesValidator:
     def _check_content_two_col(self, slide: dict, idx: int, lim: dict) -> None:  # type: ignore[type-arg]
         self._max_len(slide, "title", lim.get("title_max_chars", 80), idx)
         max_bullets = lim.get("bullets_per_column_max", 6)
+        bullet_max_chars = lim.get("bullet_max_chars", 100)
         for col_name in ("left", "right"):
             col = slide.get(col_name, {})
             bullets = col.get("bullets", [])
@@ -39,6 +40,7 @@ class BusinessRulesValidator:
                     field=f"{col_name}.bullets",
                     slide_index=idx,
                 )
+            self._max_len_list(bullets, bullet_max_chars, f"{col_name}.bullets", idx)
 
     def _check_content_one_col(self, slide: dict, idx: int, lim: dict) -> None:  # type: ignore[type-arg]
         self._max_len(slide, "title", lim.get("title_max_chars", 80), idx)
@@ -50,6 +52,7 @@ class BusinessRulesValidator:
                 field="bullets",
                 slide_index=idx,
             )
+        self._max_len_list(bullets, lim.get("bullet_max_chars", 100), "bullets", idx)
 
     def _check_grafico(self, slide: dict, idx: int, lim: dict) -> None:  # type: ignore[type-arg]
         self._max_len(slide, "title", lim.get("title_max_chars", 80), idx)
@@ -96,6 +99,7 @@ class BusinessRulesValidator:
                         f"Row {i}: 'quantity' must be >= 0", field=f"rows[{i}].quantity", slide_index=idx
                     )
                 computed_total += float(row.get("total", 0.0))
+                self._max_len(row, "description", lim.get("bullet_max_chars", 100), idx, field_label=f"rows[{i}].description")
         declared = slide.get("totals")
         if declared is not None and abs(computed_total - float(declared)) > 0.01:
             raise BusinessRuleError(
@@ -119,6 +123,7 @@ class BusinessRulesValidator:
             raise BusinessRuleError(
                 "'years_experience' must be >= 0", field="years_experience", slide_index=idx
             )
+        self._max_len_list(slide.get("highlights") or [], lim.get("bullet_max_chars", 100), "highlights", idx)
 
     def _check_stat_callout(self, slide: dict, idx: int, lim: dict) -> None:  # type: ignore[type-arg]
         self._max_len(slide, "label", lim.get("title_max_chars", 80), idx)
@@ -133,11 +138,27 @@ class BusinessRulesValidator:
                 slide_index=idx,
             )
 
-    def _max_len(self, slide: dict, field: str, max_chars: int, idx: int) -> None:  # type: ignore[type-arg]
+    def _max_len(self, slide: dict, field: str, max_chars: int, idx: int, field_label: str | None = None) -> None:  # type: ignore[type-arg]
         value = slide.get(field)
         if value and isinstance(value, str) and len(value) > max_chars:
             raise BusinessRuleError(
-                f"Field '{field}' is {len(value)} chars; maximum is {max_chars}",
-                field=field,
+                f"Field '{field_label or field}' is {len(value)} chars; maximum is {max_chars}",
+                field=field_label or field,
                 slide_index=idx,
             )
+
+    def _max_len_list(self, items: list, max_chars: int, field_label: str, idx: int) -> None:  # type: ignore[type-arg]
+        """Valida la longitud de cada item de texto en una lista (bullets, highlights, etc.).
+
+        Consistente con _max_len: si un item individual excede el limite, falla
+        duro ANTES del render — evita que el renderer trunque silenciosamente
+        con '...' sin que el usuario se entere (asimetria que existia antes:
+        solo se validaba la CANTIDAD de items, nunca el largo de cada uno).
+        """
+        for i, item in enumerate(items):
+            if isinstance(item, str) and len(item) > max_chars:
+                raise BusinessRuleError(
+                    f"Item {i} in '{field_label}' is {len(item)} chars; maximum is {max_chars}",
+                    field=f"{field_label}[{i}]",
+                    slide_index=idx,
+                )

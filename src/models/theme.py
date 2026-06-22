@@ -46,10 +46,12 @@ class SlideLayoutIndex(BaseModel):
     cover: int
     section_divider: int
     content_two_col: int
+    content_one_col: int = 6
     pricing_table: int
     profile_card: int
     stat_callout: int
     closing: int
+    grafico: int = 6
 
 
 class ThemeModel(BaseModel):

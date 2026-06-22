@@ -1,10 +1,17 @@
 from __future__ import annotations
 
-from pptx.enum.text import PP_ALIGN
+from typing import Any
 
 from src.layout import layout_config as lc
 from src.layout.base_layout import BaseLayoutRenderer
-from src.layout.helpers import add_bullet_list, add_colored_box, add_text_box, set_slide_background, truncate_text
+from src.layout.helpers import (
+    add_bullet_list,
+    add_colored_box,
+    add_text_box,
+    render_layout_extras,
+    set_slide_background,
+    truncate_text,
+)
 from src.models.slides import ContentOneColSlide
 from src.models.theme import ThemeModel
 
@@ -17,8 +24,11 @@ _D = {
 }
 
 
-def _p(el: str) -> dict:
-    return {**_D[el], **lc.pos("content_one_col", el)}
+def _p(el: str) -> dict[str, Any] | None:
+    override = lc.pos("content_one_col", el)
+    if override is None:
+        return None
+    return {**_D[el], **override}
 
 
 class ContentOneColRenderer(BaseLayoutRenderer):
@@ -30,26 +40,27 @@ class ContentOneColRenderer(BaseLayoutRenderer):
 
         set_slide_background(slide, c.background)  # type: ignore[arg-type]
 
-        p = _p("header_bar")
-        add_colored_box(slide, p["left"], p["top"], p["width"], p["height"], p.get("fill", c.primary))  # type: ignore[arg-type]
+        if (p := _p("header_bar")) is not None:
+            add_colored_box(slide, p["left"], p["top"], p["width"], p["height"], p.get("fill", c.primary))  # type: ignore[arg-type]
 
-        p = _p("title")
         title = truncate_text(model.title, lim.title_max_chars, "content_one_col.title")
-        add_text_box(slide, p["left"], p["top"], p["width"], p["height"], title,  # type: ignore[arg-type]
-                     f.family, p.get("font_size", f.size_subheading), p.get("color", c.text_light),
-                     bold=f.bold_headings)
+        if (p := _p("title")) is not None:
+            add_text_box(slide, p["left"], p["top"], p["width"], p["height"], title,  # type: ignore[arg-type]
+                         f.family, p.get("font_size", f.size_subheading), p.get("color", c.text_light),
+                         bold=p.get("bold", f.bold_headings))
 
-        p = _p("accent_line")
-        add_colored_box(slide, p["left"], p["top"], p["width"], p["height"], p.get("fill", c.accent))  # type: ignore[arg-type]
+        al = _p("accent_line")
+        if al is not None:
+            add_colored_box(slide, al["left"], al["top"], al["width"], al["height"], al.get("fill", c.accent))  # type: ignore[arg-type]
 
-        if model.body_title:
-            p = _p("body_title")
+        if model.body_title and (p := _p("body_title")) is not None:
             add_text_box(slide, p["left"], p["top"], p["width"], p["height"], model.body_title,  # type: ignore[arg-type]
-                         f.family, p.get("font_size", f.size_body + 2), p.get("color", c.primary), bold=True)
+                         f.family, p.get("font_size", f.size_body + 2), p.get("color", c.primary), bold=p.get("bold", True))
 
-        if model.bullets:
-            p = _p("bullets")
-            top = p["top"] if model.body_title else _p("accent_line")["top"] + 0.3
+        if model.bullets and (p := _p("bullets")) is not None:
+            top = p["top"] if model.body_title else (al["top"] + 0.3 if al is not None else p["top"])
             items = [truncate_text(b, lim.bullet_max_chars, f"bullets[{i}]") for i, b in enumerate(model.bullets)]
             add_bullet_list(slide, p["left"], top, p["width"], p["height"],  # type: ignore[arg-type]
                             items, f.family, p.get("font_size", f.size_body), p.get("color", c.text_dark))
+
+        render_layout_extras(slide, "content_one_col", set(_D.keys()), c.accent, model=model)  # type: ignore[arg-type]

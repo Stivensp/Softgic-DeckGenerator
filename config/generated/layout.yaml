@@ -1,0 +1,552 @@
+# config/generated/layout.yaml — actualizado desde editor visual
+# Medidas en pulgadas (1" = 2.54 cm). font_size en puntos. color/fill en hex RGB.
+
+cover:
+  _background:
+    type: solid
+    color: FFFFFF
+  Image 0:
+    left: 0.447
+    top: 1.031
+    width: 6.078
+    height: 0.403
+    kind: image
+    src: config/images/cover/image_0.png
+  Shape 0:
+    left: 0.447
+    top: 2.58
+    width: 0.097
+    height: 0.12
+    kind: box
+    fill: F7A730
+  Text 1:
+    left: 0.766
+    top: 2.581
+    width: 2.885
+    height: 0.185
+    kind: text
+    font_size: 9
+    bold: true
+    color: 20BFD0
+    text: PROPUESTA · PITCH LATAM
+    margin_left: 0.028
+    margin_top: 0.028
+    margin_right: 0.028
+    margin_bottom: 0.028
+  Text 2:
+    left: 0.447
+    top: 3.101
+    width: 5.468
+    height: 1.264
+    kind: text
+    font_size: 39
+    bold: true
+    color: 2E3338
+    text: Transformación Digital & Cognitiva
+    margin_left: 0.028
+    margin_top: 0.028
+    margin_right: 0.028
+    margin_bottom: 0.028
+  Text 3:
+    left: 0.447
+    top: 5.372
+    width: 4.816
+    height: 0.609
+    kind: text
+    font_size: 13
+    color: 53595F
+    text: Propuesta de servicios y costeo de proyecto a la medida de tu negocio.
+    margin_left: 0.028
+    margin_top: 0.028
+    margin_right: 0.028
+    margin_bottom: 0.028
+  Text 4:
+    left: 0.489
+    top: 6.348
+    width: 2.362
+    height: 0.153
+    kind: text
+    font_size: 7
+    bold: true
+    color: 9AA1A7
+    text: CLIENTE
+    margin_left: 0.028
+    margin_top: 0.028
+    margin_right: 0.028
+    margin_bottom: 0.028
+  Text 5:
+    left: 0.489
+    top: 6.619
+    width: 2.362
+    height: 0.236
+    kind: text
+    font_size: 13
+    bold: true
+    color: 2E3338
+    text: Industrias del Pacífico S.A.
+    margin_left: 0.028
+    margin_top: 0.028
+    margin_right: 0.028
+    margin_bottom: 0.028
+  Text 6:
+    left: 3.256
+    top: 6.348
+    width: 0.916
+    height: 0.153
+    kind: text
+    font_size: 7
+    bold: true
+    color: 9AA1A7
+    text: FECHA
+    margin_left: 0.028
+    margin_top: 0.028
+    margin_right: 0.028
+    margin_bottom: 0.028
+  Text 7:
+    left: 3.256
+    top: 6.619
+    width: 0.916
+    height: 0.236
+    kind: text
+    font_size: 13
+    bold: true
+    color: 2E3338
+    text: Junio 2026
+    margin_left: 0.028
+    margin_top: 0.028
+    margin_right: 0.028
+    margin_bottom: 0.028
+  Text 8:
+    left: 4.593
+    top: 6.348
+    width: 2.282
+    height: 0.153
+    kind: text
+    font_size: 7
+    bold: true
+    color: 9AA1A7
+    text: PREPARADO POR
+    margin_left: 0.028
+    margin_top: 0.028
+    margin_right: 0.028
+    margin_bottom: 0.028
+  Text 9:
+    left: 4.593
+    top: 6.619
+    width: 2.282
+    height: 0.236
+    kind: text
+    font_size: 13
+    bold: true
+    color: 2E3338
+    text: Equipo Comercial Softgic
+    margin_left: 0.028
+    margin_top: 0.028
+    margin_right: 0.028
+    margin_bottom: 0.028
+  client:
+    hidden: true
+  accent_bar:
+    hidden: true
+  divider:
+    hidden: true
+  logo:
+    hidden: true
+  subtitle:
+    hidden: true
+  meta:
+    hidden: true
+  title:
+    hidden: true
+  Text 16:
+    hidden: true
+  Shape 15:
+    hidden: true
+  Image 1:
+    hidden: true
+  Shape 12:
+    hidden: true
+  Shape 13:
+    hidden: true
+  Shape 14:
+    hidden: true
+  TextBox 3:
+    hidden: true
+  TextBox 5:
+    hidden: true
+  Picture 7:
+    hidden: true
+  Picture 9:
+    hidden: true
+section_divider:
+  _background:
+    type: solid
+    color: 2E3338
+  Shape 0:
+    left: 9.891
+    top: -2.477
+    width: 5.417
+    height: 5.417
+    kind: oval
+  Shape 1:
+    left: -1.583
+    top: 4.221
+    width: 5.0
+    height: 5.0
+    kind: oval
+  Text 2:
+    left: 3.071
+    top: 2.069
+    width: 4.025
+    height: 2.875
+    kind: text
+    font_size: 200
+    bold: true
+    text: '01'
+    margin_left: 0.028
+    margin_top: 0.028
+    margin_right: 0.028
+    margin_bottom: 0.028
+  Shape 3:
+    left: 6.111
+    top: 2.858
+    width: 0.146
+    height: 0.181
+    kind: box
+    fill: F7A730
+  Text 4:
+    left: 6.402
+    top: 2.831
+    width: 1.458
+    height: 0.278
+    kind: text
+    font_size: 14
+    bold: true
+    color: 20BFD0
+    text: SECCIÓN
+    margin_left: 0.028
+    margin_top: 0.028
+    margin_right: 0.028
+    margin_bottom: 0.028
+  Text 5:
+    left: 6.111
+    top: 3.296
+    width: 7.148
+    height: 0.938
+    kind: text
+    font_size: 50
+    bold: true
+    color: FFFFFF
+    text: Quiénes somos
+    margin_left: 0.028
+    margin_top: 0.028
+    margin_right: 0.028
+    margin_bottom: 0.028
+  Text 6:
+    left: 3.188
+    top: 4.421
+    width: 10.718
+    height: 0.537
+    kind: text
+    font_size: 24
+    color: C4C9CD
+    bold: true
+    runs:
+    - text: 'Hacemos las cosas '
+      color: C4C9CD
+      font_size: 24
+    - text: 'más fáciles '
+      color: F7A730
+      bold: true
+      font_size: 24
+    - text: 'con '
+      color: C4C9CD
+      font_size: 24
+    - text: tecnología
+      color: 20BFD0
+      bold: true
+      font_size: 24
+    - text: .
+      color: C4C9CD
+      font_size: 24
+    text: Hacemos las cosas más fáciles con tecnología.
+    margin_left: 0.028
+    margin_top: 0.028
+    margin_right: 0.028
+    margin_bottom: 0.028
+  section_title:
+    hidden: true
+  top_line:
+    hidden: true
+  divider:
+    hidden: true
+  tagline:
+    hidden: true
+  right_bar:
+    hidden: true
+  section_number:
+    hidden: true
+content_two_col:
+  _background:
+    type: solid
+    color: FFFFFF
+  left_col_title:
+    hidden: true
+  divider:
+    hidden: true
+  accent_line:
+    hidden: true
+  right_col_title:
+    hidden: true
+  header_bar:
+    hidden: true
+  left_col_bullets:
+    hidden: true
+  right_col_bullets:
+    hidden: true
+  title:
+    hidden: true
+content_one_col:
+  _background:
+    type: solid
+    color: FFFFFF
+  accent_line:
+    hidden: true
+  bullets:
+    hidden: true
+  header_bar:
+    hidden: true
+  body_title:
+    hidden: true
+  title:
+    hidden: true
+  Shape 0:
+    hidden: true
+  Text 1:
+    hidden: true
+  Text 2:
+    hidden: true
+  Shape 3:
+    hidden: true
+  Shape 4:
+    hidden: true
+  Text 5:
+    hidden: true
+  Text 6:
+    hidden: true
+  Shape 7:
+    hidden: true
+  Text 8:
+    hidden: true
+  Shape 9:
+    hidden: true
+  Text 10:
+    hidden: true
+  Shape 11:
+    hidden: true
+  Text 12:
+    hidden: true
+  Shape 13:
+    hidden: true
+  Text 14:
+    hidden: true
+  Shape 15:
+    hidden: true
+  Shape 16:
+    hidden: true
+  Text 17:
+    hidden: true
+  Text 18:
+    hidden: true
+  Shape 19:
+    hidden: true
+  Text 20:
+    hidden: true
+  Shape 21:
+    hidden: true
+  Text 22:
+    hidden: true
+  Shape 23:
+    hidden: true
+  Text 24:
+    hidden: true
+  Shape 25:
+    hidden: true
+  Text 26:
+    hidden: true
+pricing_table:
+  _background:
+    type: solid
+    color: FFFFFF
+  table:
+    hidden: true
+  accent_line:
+    hidden: true
+  header_bar:
+    hidden: true
+  notes:
+    hidden: true
+  title:
+    hidden: true
+  Shape 0:
+    hidden: true
+  Text 1:
+    hidden: true
+  Text 2:
+    hidden: true
+  Shape 3:
+    hidden: true
+  Shape 5:
+    hidden: true
+  Text 6:
+    hidden: true
+  Shape 7:
+    hidden: true
+  Text 8:
+    hidden: true
+  Text 9:
+    hidden: true
+  Shape 10:
+    hidden: true
+  Text 11:
+    hidden: true
+  Text 12:
+    hidden: true
+  Text 13:
+    hidden: true
+  Text 14:
+    hidden: true
+  Text 15:
+    hidden: true
+  Shape 28:
+    hidden: true
+  Text 29:
+    hidden: true
+  Shape 30:
+    hidden: true
+  Text 31:
+    hidden: true
+  Shape 32:
+    hidden: true
+  Text 33:
+    hidden: true
+  Shape 34:
+    hidden: true
+profile_card:
+  _background:
+    type: solid
+    color: FFFFFF
+  photo:
+    hidden: true
+  highlights_area:
+    hidden: true
+  left_accent_bar:
+    hidden: true
+  name:
+    hidden: true
+  left_panel:
+    hidden: true
+  seniority:
+    hidden: true
+  skills_label:
+    hidden: true
+  panel_divider:
+    hidden: true
+  highlights_label:
+    hidden: true
+  skills_area:
+    hidden: true
+  role:
+    hidden: true
+stat_callout:
+  _background:
+    type: solid
+    color: 2E3338
+  context:
+    hidden: true
+  accent_bar_top:
+    hidden: true
+  label:
+    hidden: true
+  divider:
+    hidden: true
+  big_number:
+    hidden: true
+  accent_bar_bottom:
+    hidden: true
+  source:
+    hidden: true
+  Shape 0:
+    hidden: true
+  Shape 1:
+    hidden: true
+  Image 0:
+    hidden: true
+  Text 2:
+    hidden: true
+  Text 3:
+    hidden: true
+  Text 4:
+    hidden: true
+  Text 5:
+    hidden: true
+  Shape 6:
+    hidden: true
+  Text 7:
+    hidden: true
+  Text 8:
+    hidden: true
+  Shape 9:
+    hidden: true
+  Text 10:
+    hidden: true
+  Text 11:
+    hidden: true
+  Shape 12:
+    hidden: true
+  Text 13:
+    hidden: true
+  Shape 14:
+    hidden: true
+  Text 15:
+    hidden: true
+closing:
+  _background:
+    type: solid
+    color: FFFFFF
+  accent_bar_top:
+    hidden: true
+  contact_label:
+    hidden: true
+  divider:
+    hidden: true
+  cta_box:
+    hidden: true
+  headline:
+    hidden: true
+  contact_phone:
+    hidden: true
+  accent_bar_bottom:
+    hidden: true
+  logo:
+    hidden: true
+  contact_name:
+    hidden: true
+  contact_email:
+    hidden: true
+  cta_text:
+    hidden: true
+grafico:
+  _background:
+    type: solid
+    color: FFFFFF
+  accent_line:
+    hidden: true
+  source:
+    hidden: true
+  chart_area:
+    hidden: true
+  header_bar:
+    hidden: true
+  title:
+    hidden: true

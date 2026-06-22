@@ -1,10 +1,19 @@
 from __future__ import annotations
 
+from typing import Any
+
 from pptx.enum.text import PP_ALIGN
 
 from src.layout import layout_config as lc
 from src.layout.base_layout import BaseLayoutRenderer
-from src.layout.helpers import add_colored_box, add_image, add_text_box, set_slide_background, truncate_text
+from src.layout.helpers import (
+    add_colored_box,
+    add_image,
+    add_text_box,
+    render_layout_extras,
+    set_slide_background,
+    truncate_text,
+)
 from src.models.slides import ClosingSlide
 from src.models.theme import ThemeModel
 
@@ -23,8 +32,11 @@ _D = {
 }
 
 
-def _p(el: str) -> dict:
-    return {**_D[el], **lc.pos("closing", el)}
+def _p(el: str) -> dict[str, Any] | None:
+    override = lc.pos("closing", el)
+    if override is None:
+        return None
+    return {**_D[el], **override}
 
 
 class ClosingRenderer(BaseLayoutRenderer):
@@ -34,49 +46,50 @@ class ClosingRenderer(BaseLayoutRenderer):
         f = theme.fonts
         lim = theme.limits
 
-        set_slide_background(slide, c.primary)  # type: ignore[arg-type]
+        set_slide_background(slide, c.background)  # type: ignore[arg-type]
 
         for bar in ("accent_bar_top", "accent_bar_bottom"):
-            p = _p(bar)
+            if (p := _p(bar)) is not None:
+                add_colored_box(slide, p["left"], p["top"], p["width"], p["height"], p.get("fill", c.accent))  # type: ignore[arg-type]
+
+        if (p := _p("logo")) is not None:
+            add_image(slide, theme.assets.logo_dark, p["left"], p["top"], p["width"], p["height"])  # type: ignore[arg-type]
+
+        headline = truncate_text(model.headline, lim.title_max_chars, "closing.headline")
+        if (p := _p("headline")) is not None:
+            add_text_box(slide, p["left"], p["top"], p["width"], p["height"], headline,  # type: ignore[arg-type]
+                         f.family, p.get("font_size", f.size_heading), p.get("color", c.text_dark),
+                         bold=p.get("bold", f.bold_headings), align=PP_ALIGN.CENTER)
+
+        if (p := _p("divider")) is not None:
             add_colored_box(slide, p["left"], p["top"], p["width"], p["height"], p.get("fill", c.accent))  # type: ignore[arg-type]
 
-        p = _p("logo")
-        add_image(slide, theme.assets.logo_white, p["left"], p["top"], p["width"], p["height"])  # type: ignore[arg-type]
+        if (p := _p("contact_label")) is not None:
+            add_text_box(slide, p["left"], p["top"], p["width"], p["height"], "CONTACTO",  # type: ignore[arg-type]
+                         f.family, p.get("font_size", f.size_caption), p.get("color", c.accent),
+                         bold=p.get("bold", True), align=PP_ALIGN.CENTER)
 
-        p = _p("headline")
-        headline = truncate_text(model.headline, lim.title_max_chars, "closing.headline")
-        add_text_box(slide, p["left"], p["top"], p["width"], p["height"], headline,  # type: ignore[arg-type]
-                     f.family, p.get("font_size", f.size_heading), p.get("color", c.text_light),
-                     bold=f.bold_headings, align=PP_ALIGN.CENTER)
+        if (p := _p("contact_name")) is not None:
+            add_text_box(slide, p["left"], p["top"], p["width"], p["height"], model.contact_name,  # type: ignore[arg-type]
+                         f.family, p.get("font_size", f.size_body), p.get("color", c.text_dark),
+                         bold=p.get("bold", True), align=PP_ALIGN.CENTER)
 
-        p = _p("divider")
-        add_colored_box(slide, p["left"], p["top"], p["width"], p["height"], p.get("fill", c.accent))  # type: ignore[arg-type]
+        if (p := _p("contact_email")) is not None:
+            add_text_box(slide, p["left"], p["top"], p["width"], p["height"], model.contact_email,  # type: ignore[arg-type]
+                         f.family, p.get("font_size", f.size_body), p.get("color", c.accent),
+                         align=PP_ALIGN.CENTER)
 
-        p = _p("contact_label")
-        add_text_box(slide, p["left"], p["top"], p["width"], p["height"], "CONTACTO",  # type: ignore[arg-type]
-                     f.family, p.get("font_size", f.size_caption), p.get("color", c.accent),
-                     bold=True, align=PP_ALIGN.CENTER)
-
-        p = _p("contact_name")
-        add_text_box(slide, p["left"], p["top"], p["width"], p["height"], model.contact_name,  # type: ignore[arg-type]
-                     f.family, p.get("font_size", f.size_body), p.get("color", c.text_light),
-                     bold=True, align=PP_ALIGN.CENTER)
-
-        p = _p("contact_email")
-        add_text_box(slide, p["left"], p["top"], p["width"], p["height"], model.contact_email,  # type: ignore[arg-type]
-                     f.family, p.get("font_size", f.size_body), p.get("color", c.accent),
-                     align=PP_ALIGN.CENTER)
-
-        if model.contact_phone:
-            p = _p("contact_phone")
+        if model.contact_phone and (p := _p("contact_phone")) is not None:
             add_text_box(slide, p["left"], p["top"], p["width"], p["height"], model.contact_phone,  # type: ignore[arg-type]
-                         f.family, p.get("font_size", f.size_body), p.get("color", c.text_light),
+                         f.family, p.get("font_size", f.size_body), p.get("color", c.text_dark),
                          align=PP_ALIGN.CENTER)
 
         if model.cta:
-            p = _p("cta_box")
-            add_colored_box(slide, p["left"], p["top"], p["width"], p["height"], p.get("fill", c.accent))  # type: ignore[arg-type]
-            p = _p("cta_text")
-            add_text_box(slide, p["left"], p["top"], p["width"], p["height"], model.cta,  # type: ignore[arg-type]
-                         f.family, p.get("font_size", f.size_body), p.get("color", c.primary),
-                         bold=True, align=PP_ALIGN.CENTER)
+            if (p := _p("cta_box")) is not None:
+                add_colored_box(slide, p["left"], p["top"], p["width"], p["height"], p.get("fill", c.accent))  # type: ignore[arg-type]
+            if (p := _p("cta_text")) is not None:
+                add_text_box(slide, p["left"], p["top"], p["width"], p["height"], model.cta,  # type: ignore[arg-type]
+                             f.family, p.get("font_size", f.size_body), p.get("color", c.primary),
+                             bold=p.get("bold", True), align=PP_ALIGN.CENTER)
+
+        render_layout_extras(slide, "closing", set(_D.keys()), c.accent, model=model)  # type: ignore[arg-type]
